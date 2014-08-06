@@ -30,8 +30,9 @@ static PyObject *decode(PyObject *self, PyObject *args)
     }
 
     /* Make sure we have a valid runtime address. */
-    if(PyInt_Check(xed->runtime_address) == 0 &&
-            PyLong_Check(xed->runtime_address)  == 0)
+    if(xed->runtime_address == NULL || 
+            (PyInt_Check(xed->runtime_address) == 0 &&
+            PyLong_Check(xed->runtime_address) == 0))
     {
         PyErr_SetString(PyExc_TypeError, "Invalid runtime address");
         goto _err;

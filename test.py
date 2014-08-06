@@ -14,7 +14,7 @@ def main(argv):
     xed.set_mode(pyxed.XED_MACHINE_MODE_LEGACY_32, pyxed.XED_ADDRESS_WIDTH_32b)
     # xed.set_mode(pyxed.XED_MACHINE_MODE_LONG_64, pyxed.XED_ADDRESS_WIDTH_64b)
     xed.itext = binascii.unhexlify(argv[1])
-    xed.runtime_address = 0x10001000;
+    xed.runtime_address = 0x10001000
 
     while True:
         inst = xed.decode()

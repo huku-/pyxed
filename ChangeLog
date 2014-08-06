@@ -1,0 +1,5 @@
+2014-08-06 huku <huku@grhack.net>
+
+    * First release of `pyxed'. Doesn't do anything useful yet; it can only
+      print decoded instructions in Intel format. 
+

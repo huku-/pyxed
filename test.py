@@ -16,11 +16,9 @@ def main(argv):
     xed.itext = binascii.unhexlify(argv[1])
     xed.runtime_address = 0x10001000;
 
-    done = False
-    while not done:
+    while True:
         inst = xed.decode()
         if inst is None:
-            done = True
             break
         print inst.dump_intel_format()
 

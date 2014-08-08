@@ -10,7 +10,7 @@ CFLAGS=-fPIC -O2 -I$(PYTHON27_HEADERS) -I$(XED_HEADERS) -Wall \
     -Wno-strict-aliasing -ggdb
 LDFLAGS=-L$(PYTHON27_LIBS) -lpython2.7 -L$(XED_LIBS) -lxed -shared
 
-OBJS=instruction.o xed.o pyxed.o
+OBJS=operand.o instruction.o xed.o pyxed.o
 BIN=pyxed.so
 
 CC=cc

@@ -10,7 +10,4 @@
 
 #include "xed-interface.h"
 
-#define UINT(x) ((unsigned int)(x))
-#define LUINT(x) ((unsigned long)(x))
-
 #endif /* _INCLUDES_H_ */

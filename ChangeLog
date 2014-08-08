@@ -1,5 +1,12 @@
+2014-08-07 huku <huku@grhack.net>
+
+    * Added `Operand' Python class implemented in "operand.c".
+    * Implemented more methods in "instruction.c".
+    * Added BSD 2-clause license.
+
+
 2014-08-06 huku <huku@grhack.net>
 
     * First release of `pyxed'. Doesn't do anything useful yet; it can only
-      print decoded instructions in Intel format. 
+      print decoded instructions in Intel format.
 

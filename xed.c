@@ -1,3 +1,8 @@
+/* pyxed - Python bindings for Intel's XED2
+ * huku <huku@grhack.net>
+ *
+ * xed.c - Exports class `XED', the main decoder object.
+ */
 #include "includes.h"
 #include "xed.h"
 #include "instruction.h"
@@ -30,7 +35,7 @@ static PyObject *decode(PyObject *self, PyObject *args)
     }
 
     /* Make sure we have a valid runtime address. */
-    if(xed->runtime_address == NULL || 
+    if(xed->runtime_address == NULL ||
             (PyInt_Check(xed->runtime_address) == 0 &&
             PyLong_Check(xed->runtime_address) == 0))
     {

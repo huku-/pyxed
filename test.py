@@ -3,6 +3,11 @@ import binascii
 
 import pyxed
 
+def dump_operands(inst):
+    for i in range(inst.get_noperands()):
+        op = inst.get_operand(i)
+        print '    Operand %d: %s' % (i, op.dump())
+
 
 def main(argv):
 
@@ -21,6 +26,11 @@ def main(argv):
         if inst is None:
             break
         print inst.dump_intel_format()
+        print '    Category:  %d' % inst.get_category()
+        print '    Extension: %d' % inst.get_extension()
+        print '    Class:     %d' % inst.get_iclass()
+        print '    Form:      %d' % inst.get_iform()
+        dump_operands(inst)
 
     return 0
 

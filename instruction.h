@@ -3,11 +3,17 @@
 
 #include "includes.h"
 
+#define m_decoded_inst(x) ((Instruction *)(x))->decoded_inst
+#define m_inst(x) ((Instruction *)(x))->inst
+#define m_runtime_address(x) ((Instruction *)(x))->runtime_address
+
 
 typedef struct
 {
     PyObject_HEAD
+    /* Members private to the implementation. */
     xed_decoded_inst_t *decoded_inst;
+    const xed_inst_t *inst;
     xed_uint64_t runtime_address;
 } Instruction;
 

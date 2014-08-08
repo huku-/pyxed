@@ -7,7 +7,7 @@
 typedef struct
 {
     PyObject_HEAD
-    /* Members exported through the `members[]' array below. */
+    /* Members exported via `members[]'. */
     PyObject *itext;
     PyObject *runtime_address;
     /* Members private to the implementation. */

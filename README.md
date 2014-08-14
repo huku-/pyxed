@@ -5,7 +5,6 @@ huku <huku@grhack.net>
 ## About
 
 WIP Python extension that uses Intel's XED2 library to decode x86 instructions.
-Currently, it can only print decoded instructions in Intel format.
 
 **pyxed** is designed to be a wrapper around XED's C API and, as such, it
 doesn't provide any high level abstractions.

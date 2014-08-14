@@ -8,6 +8,11 @@ def dump_operands(inst):
         op = inst.get_operand(i)
         print '    Operand %d: %s' % (i, op.dump())
 
+        if op.is_register():
+            print '        Operand is register'
+        if op.is_memory_addressing_register():
+            print '        Operand is memory addressing register'
+
 
 def main(argv):
 

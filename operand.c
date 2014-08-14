@@ -66,6 +66,20 @@ static PyObject *dump(PyObject *self, PyObject *args)
 }
 
 
+static PyObject *is_memory_addressing_register(PyObject *self, PyObject *args)
+{
+    const xed_operand_t *operand = m_operand(self);
+    return PyInt_FromSize_t(xed_operand_is_memory_addressing_register(
+        xed_operand_name(operand)));
+}
+
+static PyObject *is_register(PyObject *self, PyObject *args)
+{
+    const xed_operand_t *operand = m_operand(self);
+    return PyInt_FromSize_t(xed_operand_is_register(xed_operand_name(operand)));
+}
+
+
 static PyMethodDef methods[] =
 {
     {"get_imm", get_imm, METH_NOARGS, "Equivalent to `xed_operand_imm()'"},
@@ -85,6 +99,11 @@ static PyMethodDef methods[] =
      * `dump_intel_format()').
      */
     {"dump", dump, METH_NOARGS, "Equivalent to `xed_operand_print()'"},
+    {"is_memory_addressing_register", is_memory_addressing_register, 
+        METH_NOARGS, 
+        "Equivalent to `xed_operand_is_memory_addressing_register()'"},
+    {"is_register", is_register, METH_NOARGS, 
+        "Equivalent to `xed_operand_is_register()'"},
     {NULL}
 };
 

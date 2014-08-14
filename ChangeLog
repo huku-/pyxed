@@ -1,3 +1,9 @@
+2014-08-14 huku <huku@grhack.net>
+
+    * Implemented `is_register()' and `is_memory_addressing_register()' in
+      "operand.c".
+
+
 2014-08-07 huku <huku@grhack.net>
 
     * Added `Operand' Python class implemented in "operand.c".

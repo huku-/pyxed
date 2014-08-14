@@ -95,6 +95,14 @@ static void register_constants(PyObject *module)
         snprintf(full_name, sizeof(full_name), "XED_OPERAND_ACTION_%s", name);
         PyModule_AddObject(module, full_name, PyInt_FromLong(i));
     }
+
+    /* Constants from "xed-operand-type-enum.h". */
+    for(i = XED_OPERAND_TYPE_INVALID; i <= XED_OPERAND_TYPE_LAST; i++)
+    {
+        name = xed_operand_type_enum_t2str((xed_operand_type_enum_t)i);
+        snprintf(full_name, sizeof(full_name), "XED_OPERAND_TYPE_%s", name);
+        PyModule_AddObject(module, full_name, PyInt_FromLong(i));
+    }
 }
 
 

@@ -1,3 +1,19 @@
+2014-09-04 huku <huku@grhack.net>
+
+    * Added "check.c" and "check.h" which contain functions for checking the
+      underlying type of `PyObject' variables.
+    * Member `itext_offset' of class `XED' is now exported and may be modified.
+    * Implemented the following methods in class `Instruction': `get_length()',
+      `get_attribute()' and `get_branch_displacement()'.
+    * Member `runtime_address' of class `Instruction' is now exported and may be
+      modified.
+    * Removed sucky `m_xxx()' macros.
+    * Renamed C structures `XED', `Instruction' and `Operand' to `xed_t',
+      `instruction_t' and `operand_t' respectively. The class names visible to
+      Python have remained the same.
+    * `XED_ATTRIBUTE_XXX' constants are now visible to Python.
+
+
 2014-08-14 huku <huku@grhack.net>
 
     * Implemented `is_register()' and `is_memory_addressing_register()' in

@@ -4,47 +4,56 @@
  * xed.c - Exports class `XED', the main decoder object.
  */
 #include "includes.h"
+#include "check.h"
 #include "xed.h"
 #include "instruction.h"
 
 
+
 static int init(PyObject *self, PyObject *args, PyObject *kwds)
 {
-    XED *xed = (XED *)self;
+    xed_t *xed = (xed_t *)self;
+    xed->itext_offset = PyLong_FromLong(0);
     xed->runtime_address = PyLong_FromLong(0x10001000);
     xed->mmode = XED_MACHINE_MODE_LONG_COMPAT_32;
     xed->stack_addr_width = XED_ADDRESS_WIDTH_32b;
-    xed->itext_offset = 0;
     return 0;
 }
 
 
 static PyObject *decode(PyObject *self, PyObject *args)
 {
-    XED *xed = (XED *)self;
+    xed_t *xed = (xed_t *)self;
     xed_decoded_inst_t *decoded_inst;
     xed_uint64_t runtime_address;
+    Py_ssize_t itext_offset;
     const xed_uint8_t *buf;
     PyObject *r = NULL;
 
     /* Make sure we have a valid input buffer. */
-    if(xed->itext == NULL || PyString_Check(xed->itext) == 0)
+    if(is_string(xed->itext) == 0)
     {
         PyErr_SetString(PyExc_TypeError, "Invalid instruction text");
         goto _err;
     }
 
     /* Make sure we have a valid runtime address. */
-    if(xed->runtime_address == NULL ||
-            (PyInt_Check(xed->runtime_address) == 0 &&
-            PyLong_Check(xed->runtime_address) == 0))
+    if(is_int_or_long(xed->runtime_address) == 0)
     {
         PyErr_SetString(PyExc_TypeError, "Invalid runtime address");
         goto _err;
     }
 
+    /* Now verify we have a valid offset. */
+    if(is_int_or_long(xed->itext_offset) == 0)
+    {
+        PyErr_SetString(PyExc_TypeError, "Invalid instruction text offset");
+        goto _err;
+    }
+
     /* Have we finished decoding? */
-    if(xed->itext_offset >= PyString_Size(xed->itext))
+    itext_offset = PyLong_AsSsize_t(xed->itext_offset);
+    if(itext_offset < 0 || itext_offset >= PyString_Size(xed->itext))
     {
         Py_INCREF(Py_None);
         r = Py_None;
@@ -55,18 +64,17 @@ static PyObject *decode(PyObject *self, PyObject *args)
     decoded_inst = PyMem_Malloc(sizeof(xed_decoded_inst_t));
     xed_decoded_inst_zero(decoded_inst);
     xed_decoded_inst_set_mode(decoded_inst, xed->mmode, xed->stack_addr_width);
-    buf = (const xed_uint8_t *)PyString_AsString(xed->itext) +
-        xed->itext_offset;
-    xed_decode(decoded_inst, buf, PyString_Size(xed->itext) -
-        xed->itext_offset);
+    buf = (const xed_uint8_t *)PyString_AsString(xed->itext) + itext_offset;
+    xed_decode(decoded_inst, buf, PyString_Size(xed->itext) - itext_offset);
 
     /* Compute the instruction's runtime address and update saved offset by the
      * number of bytes corresponding to the decoded instruction (the call to
      * `xed_decoded_inst_get_length()' will return a valid length even if the
      * decoded instruction is not valid).
      */
-    runtime_address = PyLong_AsLong(xed->runtime_address) + xed->itext_offset;
-    xed->itext_offset += xed_decoded_inst_get_length(decoded_inst);
+    runtime_address = PyLong_AsLong(xed->runtime_address) + itext_offset;
+    itext_offset += xed_decoded_inst_get_length(decoded_inst);
+    xed->itext_offset = PyLong_FromLong(itext_offset);
 
     /* If the instruction is not valid, return `None'. */
     if(xed_decoded_inst_valid(decoded_inst) == 0)
@@ -86,7 +94,7 @@ _err:
 
 static PyObject *set_mode(PyObject *self, PyObject *args)
 {
-    XED *xed = (XED *)self;
+    xed_t *xed = (xed_t *)self;
     unsigned int mmode, stack_addr_width;
     if(PyArg_ParseTuple(args, "II", &mmode, &stack_addr_width) != 0)
     {
@@ -99,9 +107,11 @@ static PyObject *set_mode(PyObject *self, PyObject *args)
 
 static PyMemberDef members[] =
 {
-    {"itext", T_OBJECT, offsetof(XED, itext), 0,
+    {"itext", T_OBJECT, offsetof(xed_t, itext), 0,
         "String object holding instruction text bytes"},
-    {"runtime_address", T_OBJECT, offsetof(XED, runtime_address), 0,
+    {"itext_offset", T_OBJECT, offsetof(xed_t, itext_offset), 0,
+        "Offset in instruction text to start decoding from"},
+    {"runtime_address", T_OBJECT, offsetof(xed_t, runtime_address), 0,
         "Runtime address of the instruction text being disassembled"},
     {NULL}
 };
@@ -118,7 +128,7 @@ static PyTypeObject type =
 {
     PyObject_HEAD_INIT(NULL)
     .tp_name = "pyxed.XED",
-    .tp_basicsize = sizeof(XED),
+    .tp_basicsize = sizeof(xed_t),
     .tp_flags = Py_TPFLAGS_DEFAULT,
     .tp_doc = "Main decoder object",
     .tp_methods = methods,

@@ -10,73 +10,74 @@
 
 static PyObject *get_imm(PyObject *self, PyObject *args)
 {
-    const xed_operand_t *operand = m_operand(self);
-    return PyInt_FromLong(xed_operand_imm(operand));
+    operand_t *operand = (operand_t *)self;
+    return PyInt_FromLong(xed_operand_imm(operand->operand));
 }
 
 static PyObject *get_name(PyObject *self, PyObject *args)
 {
-    const xed_operand_t *operand = m_operand(self);
-    return PyInt_FromLong(xed_operand_name(operand));
+    operand_t *operand = (operand_t *)self;
+    return PyInt_FromLong(xed_operand_name(operand->operand));
 }
 
 static PyObject *get_visibility(PyObject *self, PyObject *args)
 {
-    const xed_operand_t *operand = m_operand(self);
-    return PyInt_FromLong(xed_operand_operand_visibility(operand));
+    operand_t *operand = (operand_t *)self;
+    return PyInt_FromLong(xed_operand_operand_visibility(operand->operand));
 }
 
 static PyObject *get_type(PyObject *self, PyObject *args)
 {
-    const xed_operand_t *operand = m_operand(self);
-    return PyInt_FromLong(xed_operand_type(operand));
+    operand_t *operand = (operand_t *)self;
+    return PyInt_FromLong(xed_operand_type(operand->operand));
 }
 
 static PyObject *get_xtype(PyObject *self, PyObject *args)
 {
-    const xed_operand_t *operand = m_operand(self);
-    return PyInt_FromLong(xed_operand_xtype(operand));
+    operand_t *operand = (operand_t *)self;
+    return PyInt_FromLong(xed_operand_xtype(operand->operand));
 }
 
 static PyObject *get_width(PyObject *self, PyObject *args)
 {
-    const xed_operand_t *operand = m_operand(self);
-    return PyInt_FromLong(xed_operand_width(operand));
+    operand_t *operand = (operand_t *)self;
+    return PyInt_FromLong(xed_operand_width(operand->operand));
 }
 
 static PyObject *get_width_bits(PyObject *self, PyObject *args)
 {
-    const xed_operand_t *operand;
+    operand_t *operand = (operand_t *)self;
     xed_uint32_t eosz;
     PyObject *r = NULL;
 
     if(PyArg_ParseTuple(args, "I", &eosz) != 0)
     {
-        operand = m_operand(self);
-        r = PyInt_FromSize_t(xed_operand_width_bits(operand, eosz));
+        r = PyInt_FromSize_t(xed_operand_width_bits(operand->operand, eosz));
     }
     return r;
 }
 
 static PyObject *dump(PyObject *self, PyObject *args)
 {
+    operand_t *operand = (operand_t *)self;
     char buf[64];
-    xed_operand_print(m_operand(self), buf, sizeof(buf) - 1);
+    xed_operand_print(operand->operand, buf, sizeof(buf) - 1);
     return PyString_FromString(buf);
 }
 
 
 static PyObject *is_memory_addressing_register(PyObject *self, PyObject *args)
 {
-    const xed_operand_t *operand = m_operand(self);
+    operand_t *operand = (operand_t *)self;
     return PyInt_FromSize_t(xed_operand_is_memory_addressing_register(
-        xed_operand_name(operand)));
+        xed_operand_name(operand->operand)));
 }
 
 static PyObject *is_register(PyObject *self, PyObject *args)
 {
-    const xed_operand_t *operand = m_operand(self);
-    return PyInt_FromSize_t(xed_operand_is_register(xed_operand_name(operand)));
+    operand_t *operand = (operand_t *)self;
+    return PyInt_FromSize_t(xed_operand_is_register(xed_operand_name(
+        operand->operand)));
 }
 
 
@@ -99,10 +100,10 @@ static PyMethodDef methods[] =
      * `dump_intel_format()').
      */
     {"dump", dump, METH_NOARGS, "Equivalent to `xed_operand_print()'"},
-    {"is_memory_addressing_register", is_memory_addressing_register, 
-        METH_NOARGS, 
+    {"is_memory_addressing_register", is_memory_addressing_register,
+        METH_NOARGS,
         "Equivalent to `xed_operand_is_memory_addressing_register()'"},
-    {"is_register", is_register, METH_NOARGS, 
+    {"is_register", is_register, METH_NOARGS,
         "Equivalent to `xed_operand_is_register()'"},
     {NULL}
 };
@@ -111,7 +112,7 @@ static PyTypeObject type =
 {
     PyObject_HEAD_INIT(NULL)
     .tp_name = "pyxed.Operand",
-    .tp_basicsize = sizeof(Operand),
+    .tp_basicsize = sizeof(operand_t),
     .tp_flags = Py_TPFLAGS_DEFAULT,
     .tp_doc = "Represents an instruction operand",
     .tp_methods = methods,
@@ -119,10 +120,10 @@ static PyTypeObject type =
 };
 
 
-Operand *new_operand(const xed_operand_t *operand)
+operand_t *new_operand(const xed_operand_t *operand)
 {
     PyObject *type_object = (PyObject *)&type;
-    Operand *op = (Operand *)PyObject_CallObject(type_object, NULL);
+    operand_t *op = (operand_t *)PyObject_CallObject(type_object, NULL);
     op->operand = operand;
     return op;
 }

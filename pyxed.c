@@ -103,6 +103,14 @@ static void register_constants(PyObject *module)
         snprintf(full_name, sizeof(full_name), "XED_OPERAND_TYPE_%s", name);
         PyModule_AddObject(module, full_name, PyInt_FromLong(i));
     }
+
+    /* Constants from "xed-attribute-enum.h". */
+    for(i = XED_ATTRIBUTE_INVALID; i <= XED_ATTRIBUTE_LAST; i++)
+    {
+        name = xed_attribute_enum_t2str((xed_attribute_enum_t)i);
+        snprintf(full_name, sizeof(full_name), "XED_ATTRIBUTE_%s", name);
+        PyModule_AddObject(module, full_name, PyInt_FromLong(i));
+    }
 }
 
 

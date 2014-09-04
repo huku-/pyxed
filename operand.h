@@ -3,18 +3,15 @@
 
 #include "includes.h"
 
-#define m_operand(x) ((Operand *)(x))->operand
-
-
 typedef struct
 {
     PyObject_HEAD
     /* Members private to the implementation. */
     const xed_operand_t *operand;
-} Operand;
+} operand_t;
 
 
-Operand *new_operand(const xed_operand_t *);
+operand_t *new_operand(const xed_operand_t *);
 void register_operand_object(PyObject *);
 
 

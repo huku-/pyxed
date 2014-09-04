@@ -1,0 +1,6 @@
+2014-09-08 huku <huku@grhack.net>
+
+    * Define new exception class `InvalidInstructionException' and so on.
+    * Throw `InvalidInstructionException' instead of returning `None' when an
+      invalid instruction is encountered.
+

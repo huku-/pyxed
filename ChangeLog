@@ -1,3 +1,12 @@
+2014-09-09 huku <huku@grhack.net>
+
+    * Added `InvalidExceptionError' exception class.
+    * Added "pyxed.h"; includes external definitions that should be visible to
+      all source files.
+    * Method `decode()' of class `XED' was modified to raise an exception when
+      the decoded instruction is invalid.
+
+
 2014-09-04 huku <huku@grhack.net>
 
     * Added "check.c" and "check.h" which contain functions for checking the

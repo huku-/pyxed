@@ -9,6 +9,12 @@
 #include "operand.h"
 
 
+/* Exceptions thrown by this module should go here. Don't forget to also declare
+ * them as `extern' in "pyxed.h".
+ */
+PyObject *invalid_instruction;
+
+
 static PyMethodDef methods[] =
 {
     {NULL}
@@ -114,6 +120,15 @@ static void register_constants(PyObject *module)
 }
 
 
+static void register_exceptions(PyObject *module)
+{
+    /* Initialize `InvalidInstructionError' exception object. */
+    invalid_instruction = PyErr_NewException("pyxed.InvalidInstructionError",
+        PyExc_StandardError, NULL);
+    PyModule_AddObject(module, "InvalidInstructionError", invalid_instruction);
+}
+
+
 PyMODINIT_FUNC initpyxed(void)
 {
     PyObject *module;
@@ -124,6 +139,7 @@ PyMODINIT_FUNC initpyxed(void)
     /* Make XED objects visible to Python. */
     module = Py_InitModule("pyxed", methods);
     register_constants(module);
+    register_exceptions(module);
     register_operand_object(module);
     register_instruction_object(module);
     register_xed_object(module);

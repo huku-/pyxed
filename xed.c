@@ -4,6 +4,7 @@
  * xed.c - Exports class `XED', the main decoder object.
  */
 #include "includes.h"
+#include "pyxed.h"
 #include "check.h"
 #include "xed.h"
 #include "instruction.h"
@@ -76,12 +77,11 @@ static PyObject *decode(PyObject *self, PyObject *args)
     itext_offset += xed_decoded_inst_get_length(decoded_inst);
     xed->itext_offset = PyLong_FromLong(itext_offset);
 
-    /* If the instruction is not valid, return `None'. */
+    /* If the instruction is not valid, raise `InvalidInstructionError'. */
     if(xed_decoded_inst_valid(decoded_inst) == 0)
     {
         PyMem_Free(decoded_inst);
-        Py_INCREF(Py_None);
-        r = Py_None;
+        PyErr_SetString(invalid_instruction, "Decoded instruction is invalid");
         goto _err;
     }
 

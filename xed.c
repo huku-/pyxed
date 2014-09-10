@@ -29,6 +29,7 @@ static PyObject *decode(PyObject *self, PyObject *args)
     xed_uint64_t runtime_address;
     Py_ssize_t itext_offset;
     const xed_uint8_t *buf;
+    unsigned int bytes;
     PyObject *r = NULL;
 
     /* Make sure we have a valid input buffer. */
@@ -66,7 +67,14 @@ static PyObject *decode(PyObject *self, PyObject *args)
     xed_decoded_inst_zero(decoded_inst);
     xed_decoded_inst_set_mode(decoded_inst, xed->mmode, xed->stack_addr_width);
     buf = (const xed_uint8_t *)PyString_AsString(xed->itext) + itext_offset;
-    xed_decode(decoded_inst, buf, PyString_Size(xed->itext) - itext_offset);
+
+    /* If we set `bytes' to something more than `XED_MAX_INSTRUCTION_BYTES', the
+     * call to `xed_decode()' below may fail when decoding certain instructions.
+     */
+    bytes = PyString_Size(xed->itext) - itext_offset;
+    if(bytes > XED_MAX_INSTRUCTION_BYTES)
+        bytes = XED_MAX_INSTRUCTION_BYTES;
+    xed_decode(decoded_inst, buf, bytes);
 
     /* Compute the instruction's runtime address and update saved offset by the
      * number of bytes corresponding to the decoded instruction (the call to

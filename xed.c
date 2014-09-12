@@ -55,10 +55,17 @@ static PyObject *decode(PyObject *self, PyObject *args)
 
     /* Have we finished decoding? */
     itext_offset = PyLong_AsSsize_t(xed->itext_offset);
-    if(itext_offset < 0 || itext_offset >= PyString_Size(xed->itext))
+    if(itext_offset == PyString_Size(xed->itext))
     {
         Py_INCREF(Py_None);
         r = Py_None;
+        goto _err;
+    }
+
+    /* If the offset given is invalid, raise `InvalidOffsetException'. */
+    if(itext_offset < 0 || itext_offset > PyString_Size(xed->itext))
+    {
+        PyErr_SetString(invalid_offset, "Invalid instruction text offset");
         goto _err;
     }
 

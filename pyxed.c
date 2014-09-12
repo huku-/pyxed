@@ -13,6 +13,7 @@
  * them as `extern' in "pyxed.h".
  */
 PyObject *invalid_instruction;
+PyObject *invalid_offset;
 
 
 static PyMethodDef methods[] =
@@ -126,6 +127,11 @@ static void register_exceptions(PyObject *module)
     invalid_instruction = PyErr_NewException("pyxed.InvalidInstructionError",
         PyExc_StandardError, NULL);
     PyModule_AddObject(module, "InvalidInstructionError", invalid_instruction);
+
+    /* Initialize `InvalidOffsetException' exception object. */
+    invalid_offset = PyErr_NewException("pyxed.InvalidOffsetException",
+        PyExc_StandardError, NULL);
+    PyModule_AddObject(module, "InvalidOffsetException", invalid_offset);
 }
 
 

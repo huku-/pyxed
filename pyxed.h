@@ -4,5 +4,6 @@
 #include "includes.h"
 
 extern PyObject *invalid_instruction;
+extern PyObject *invalid_offset;
 
 #endif /* _PYXED_H_ */

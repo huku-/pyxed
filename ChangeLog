@@ -1,3 +1,10 @@
+2014-09-11 huku <huku@grhack.net>
+
+    * Added `InvalidOffsetException' exception class.
+    * Method `decode()' of class `XED' was modified to raise the aforementioned
+      exception when `itext_offset' doesn't fall within `itext' bounds.
+
+
 2014-09-10 huku <huku@grhack.net>
 
     * Fixed bug in `decode()' of class `XED' (`xed_decode()' may fail when the

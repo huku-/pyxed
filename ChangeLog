@@ -1,3 +1,9 @@
+2014-09-15 huku <huku@grhack.net>
+
+    * Instantiating `Instruction' and `Operand' objects by hand is not possible
+      any more.
+
+
 2014-09-11 huku <huku@grhack.net>
 
     * Added `InvalidOffsetException' exception class.

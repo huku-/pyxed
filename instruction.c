@@ -156,17 +156,18 @@ static PyTypeObject type =
     .tp_flags = Py_TPFLAGS_DEFAULT,
     .tp_doc = "Represents a decoded instruction",
     .tp_methods = methods,
-    .tp_members = members,
-    .tp_new = PyType_GenericNew
+    .tp_members = members
 };
 
 
+/* Allocate and initialize a new `Instruction' object given the associated
+ * `xed_decoded_inst_t' structure.
+ */
 instruction_t *new_instruction(xed_decoded_inst_t *decoded_inst,
         xed_uint64_t runtime_address)
 {
-    PyObject *type_object = (PyObject *)&type;
     instruction_t *instruction =
-        (instruction_t *)PyObject_CallObject(type_object, NULL);
+        (instruction_t *)PyType_GenericNew(&type, NULL, NULL);
     instruction->decoded_inst = decoded_inst;
     instruction->inst = xed_decoded_inst_inst(decoded_inst);
     instruction->runtime_address = PyLong_FromLong(runtime_address);

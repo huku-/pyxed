@@ -115,15 +115,16 @@ static PyTypeObject type =
     .tp_basicsize = sizeof(operand_t),
     .tp_flags = Py_TPFLAGS_DEFAULT,
     .tp_doc = "Represents an instruction operand",
-    .tp_methods = methods,
-    .tp_new = PyType_GenericNew
+    .tp_methods = methods
 };
 
 
+/* Allocate and initialize a new `Operand' object given the associated
+ * `xed_operand_t' structure.
+ */
 operand_t *new_operand(const xed_operand_t *operand)
 {
-    PyObject *type_object = (PyObject *)&type;
-    operand_t *op = (operand_t *)PyObject_CallObject(type_object, NULL);
+    operand_t *op = (operand_t *)PyType_GenericNew(&type, NULL, NULL);
     op->operand = operand;
     return op;
 }

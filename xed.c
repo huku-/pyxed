@@ -54,7 +54,7 @@ static PyObject *decode(PyObject *self, PyObject *args)
     }
 
     /* Have we finished decoding? */
-    itext_offset = PyLong_AsSsize_t(xed->itext_offset);
+    itext_offset = PyLong_AsLong(xed->itext_offset);
     if(itext_offset == PyString_Size(xed->itext))
     {
         Py_INCREF(Py_None);

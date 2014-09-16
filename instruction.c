@@ -88,11 +88,18 @@ static PyObject *dump_intel_format(PyObject *self, PyObject *args)
     if(is_int_or_long(instruction->runtime_address))
     {
         runtime_address = PyLong_AsLong(instruction->runtime_address);
-        xed_decoded_inst_dump_intel_format(decoded_inst, tmp1, sizeof(tmp1) - 1,
-            runtime_address);
+
+        /* In Pin versions before "pin-2.14-*", `xed_format_context()' takes 6
+         * parameters instead of 7. Unfortunately, there's no consistent way of
+         * dumping instructions between various XED versions and there's no easy
+         * way of detecting the actual XED version at compile time.
+         */
+        xed_format_context(XED_SYNTAX_INTEL, decoded_inst, tmp1,
+            sizeof(tmp1) - 1, runtime_address, NULL, NULL);
 
         if(xed_decoded_inst_get_machine_mode_bits(decoded_inst) == 64)
-            snprintf(tmp2, sizeof(tmp2), "%.16llx %s", runtime_address, tmp1);
+            snprintf(tmp2, sizeof(tmp2), "%.16llx %s",
+                (unsigned long long)runtime_address, tmp1);
         else
             snprintf(tmp2, sizeof(tmp2), "%.8lx %s",
                 (unsigned long)runtime_address, tmp1);

@@ -1,3 +1,11 @@
+2014-09-16 huku <huku@grhack.net>
+
+    * Fixed `snprintf()' related compiler warning on 64-bit systems.
+    * Replaced `PyLong_AsSize_t()' with `PyLong_AsLong()'; the first may return
+      -1 even though it shouldn't.
+    * From now on, we only support Pin >= 2.14.
+
+
 2014-09-15 huku <huku@grhack.net>
 
     * Instantiating `Instruction' and `Operand' objects by hand is not possible

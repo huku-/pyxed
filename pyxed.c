@@ -118,6 +118,14 @@ static void register_constants(PyObject *module)
         snprintf(full_name, sizeof(full_name), "XED_ATTRIBUTE_%s", name);
         PyModule_AddObject(module, full_name, PyInt_FromLong(i));
     }
+
+    /* Constants from "xed-reg-enum.h". */
+    for(i = XED_REG_INVALID; i <= XED_REG_LAST; i++)
+    {
+        name = xed_reg_enum_t2str((xed_reg_enum_t)i);
+        snprintf(full_name, sizeof(full_name), "XED_REG_%s", name);
+        PyModule_AddObject(module, full_name, PyInt_FromLong(i));
+    }
 }
 
 

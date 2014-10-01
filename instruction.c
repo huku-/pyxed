@@ -10,84 +10,66 @@
 #include "operand.h"
 
 
+/* Instruction information related methods. */
 
-static PyObject *get_noperands(PyObject *self, PyObject *args)
+static PyObject *get_category(instruction_t *self, PyObject *args)
 {
-    instruction_t *instruction = (instruction_t *)self;
-    xed_decoded_inst_t *decoded_inst = instruction->decoded_inst;
-    return PyInt_FromSize_t(xed_decoded_inst_noperands(decoded_inst));
+    return PyInt_FromLong(xed_decoded_inst_get_category(self->decoded_inst));
 }
 
-static PyObject *get_category(PyObject *self, PyObject *args)
+static PyObject *get_extension(instruction_t *self, PyObject *args)
 {
-    instruction_t *instruction = (instruction_t *)self;
-    xed_decoded_inst_t *decoded_inst = instruction->decoded_inst;
-    return PyInt_FromLong(xed_decoded_inst_get_category(decoded_inst));
+    return PyInt_FromLong(xed_decoded_inst_get_extension(self->decoded_inst));
 }
 
-static PyObject *get_extension(PyObject *self, PyObject *args)
+static PyObject *get_iclass(instruction_t *self, PyObject *args)
 {
-    instruction_t *instruction = (instruction_t *)self;
-    xed_decoded_inst_t *decoded_inst = instruction->decoded_inst;
-    return PyInt_FromLong(xed_decoded_inst_get_extension(decoded_inst));
+    return PyInt_FromLong(xed_decoded_inst_get_iclass(self->decoded_inst));
 }
 
-static PyObject *get_iclass(PyObject *self, PyObject *args)
+static PyObject *get_iform(instruction_t *self, PyObject *args)
 {
-    instruction_t *instruction = (instruction_t *)self;
-    xed_decoded_inst_t *decoded_inst = instruction->decoded_inst;
-    return PyInt_FromLong(xed_decoded_inst_get_iclass(decoded_inst));
+    return PyInt_FromLong(xed_decoded_inst_get_iform_enum(self->decoded_inst));
 }
 
-static PyObject *get_iform(PyObject *self, PyObject *args)
+static PyObject *get_attribute(instruction_t *self, PyObject *args)
 {
-    instruction_t *instruction = (instruction_t *)self;
-    xed_decoded_inst_t *decoded_inst = instruction->decoded_inst;
-    return PyInt_FromLong(xed_decoded_inst_get_iform_enum(decoded_inst));
-}
-
-static PyObject *get_length(PyObject *self, PyObject *args)
-{
-    instruction_t *instruction = (instruction_t *)self;
-    xed_decoded_inst_t *decoded_inst = instruction->decoded_inst;
-    return PyInt_FromLong(xed_decoded_inst_get_length(decoded_inst));
-}
-
-static PyObject *get_attribute(PyObject *self, PyObject *args)
-{
-    instruction_t *instruction = (instruction_t *)self;
-    xed_decoded_inst_t *decoded_inst = instruction->decoded_inst;
     PyObject *r = NULL;
     xed_uint32_t is_set;
     int attr;
 
+    /* Treat enumerations as `int' values (see comment in "pyxed.c"). */
     if(PyArg_ParseTuple(args, "i", &attr) != 0)
     {
-        is_set = xed_decoded_inst_get_attribute(decoded_inst, attr);
+        is_set = xed_decoded_inst_get_attribute(self->decoded_inst, attr);
         r = (PyObject *)PyBool_FromLong(is_set);
     }
     return r;
 }
 
-static PyObject *get_branch_displacement(PyObject *self, PyObject *args)
+static PyObject *get_length(instruction_t *self, PyObject *args)
 {
-    instruction_t *instruction = (instruction_t *)self;
-    xed_decoded_inst_t *decoded_inst = instruction->decoded_inst;
-    xed_uint_t disp = xed_decoded_inst_get_branch_displacement(decoded_inst);
-    return PyInt_FromLong(disp);
+    return PyInt_FromLong(xed_decoded_inst_get_length(self->decoded_inst));
 }
 
-static PyObject *dump_intel_format(PyObject *self, PyObject *args)
+static PyObject *conditionally_writes_registers(instruction_t *self,
+        PyObject *args)
 {
-    instruction_t *instruction = (instruction_t *)self;
-    xed_decoded_inst_t *decoded_inst = instruction->decoded_inst;
+    xed_bool_t writes_registers =
+        xed_decoded_inst_conditionally_writes_registers(self->decoded_inst);
+    return PyBool_FromLong((long)writes_registers);
+}
+
+static PyObject *dump_intel_format(instruction_t *self, PyObject *args)
+{
+    xed_decoded_inst_t *decoded_inst = self->decoded_inst;
     PyObject *r = NULL;
     xed_uint64_t runtime_address;
     char tmp1[64], tmp2[96];
 
-    if(is_int_or_long(instruction->runtime_address))
+    if(is_int_or_long(self->runtime_address))
     {
-        runtime_address = PyLong_AsLong(instruction->runtime_address);
+        runtime_address = PyLong_AsLong(self->runtime_address);
 
         /* In Pin versions before "pin-2.14-*", `xed_format_context()' takes 6
          * parameters instead of 7. Unfortunately, there's no consistent way of
@@ -108,11 +90,140 @@ static PyObject *dump_intel_format(PyObject *self, PyObject *args)
     return r;
 }
 
-static PyObject *get_operand(PyObject *self, PyObject *args)
+
+/* Branch displacement related methods (getters & setters). */
+
+static PyObject *get_branch_displacement(instruction_t *self, PyObject *args)
 {
-    instruction_t *instruction = (instruction_t *)self;
-    xed_decoded_inst_t *decoded_inst = instruction->decoded_inst;
-    const xed_inst_t *inst = instruction->inst;
+    xed_uint_t disp =
+        xed_decoded_inst_get_branch_displacement(self->decoded_inst);
+    return PyLong_FromUnsignedLong(disp);
+}
+
+static PyObject *get_branch_displacement_width(instruction_t *self,
+        PyObject *args)
+{
+    xed_uint_t width =
+        xed_decoded_inst_get_branch_displacement_width(self->decoded_inst);
+    return PyLong_FromUnsignedLong(width);
+}
+
+static PyObject *get_branch_displacement_width_bits(instruction_t *self,
+        PyObject *args)
+{
+    xed_uint_t width =
+        xed_decoded_inst_get_branch_displacement_width_bits(self->decoded_inst);
+    return PyLong_FromUnsignedLong(width);
+}
+
+static PyObject *set_branch_displacement(instruction_t *self, PyObject *args)
+{
+    xed_int32_t disp;
+    xed_uint_t length_bytes;
+
+    if(PyArg_ParseTuple(args, "iI", &disp, &length_bytes) != 0)
+        xed_decoded_inst_set_branch_displacement(self->decoded_inst, disp,
+            length_bytes);
+    return NULL;
+}
+
+static PyObject *set_branch_displacement_bits(instruction_t *self,
+        PyObject *args)
+{
+    xed_int32_t disp;
+    xed_uint_t length_bits;
+
+    if(PyArg_ParseTuple(args, "iI", &disp, &length_bits) != 0)
+        xed_decoded_inst_set_branch_displacement_bits(self->decoded_inst, disp,
+            length_bits);
+    return NULL;
+}
+
+
+/* Memory displacement related methods (getters & setters). */
+
+static PyObject *get_memory_displacement(instruction_t *self, PyObject *args)
+{
+    xed_int64_t disp;
+    unsigned int mem_idx;
+    PyObject *r = NULL;
+
+    if(PyArg_ParseTuple(args, "I", &mem_idx) != 0)
+    {
+        disp = xed_decoded_inst_get_memory_displacement(self->decoded_inst,
+            mem_idx);
+        r = (PyObject *)PyLong_FromLongLong(disp);
+    }
+    return r;
+}
+
+static PyObject *get_memory_displacement_width(instruction_t *self,
+        PyObject *args)
+{
+    xed_uint_t width;
+    unsigned int mem_idx;
+    PyObject *r = NULL;
+
+    if(PyArg_ParseTuple(args, "I", &mem_idx) != 0)
+    {
+        width = xed_decoded_inst_get_memory_displacement_width(
+            self->decoded_inst, mem_idx);
+        r = (PyObject *)PyLong_FromUnsignedLong(width);
+    }
+    return r;
+}
+
+static PyObject *get_memory_displacement_width_bits(instruction_t *self,
+        PyObject *args)
+{
+    xed_uint_t width;
+    unsigned int mem_idx;
+    PyObject *r = NULL;
+
+    if(PyArg_ParseTuple(args, "I", &mem_idx) != 0)
+    {
+        width = xed_decoded_inst_get_memory_displacement_width_bits(
+            self->decoded_inst, mem_idx);
+        r = (PyObject *)PyLong_FromUnsignedLong(width);
+    }
+    return r;
+}
+
+static PyObject *set_memory_displacement(instruction_t *self, PyObject *args)
+{
+    xed_int64_t disp;
+    xed_uint_t length_bytes;
+
+    if(PyArg_ParseTuple(args, "LI", &disp, &length_bytes) != 0)
+        xed_decoded_inst_set_memory_displacement(self->decoded_inst, disp,
+            length_bytes);
+    return NULL;
+}
+
+static PyObject *set_memory_displacement_bits(instruction_t *self,
+        PyObject *args)
+{
+    xed_int64_t disp;
+    xed_uint_t length_bits;
+
+    if(PyArg_ParseTuple(args, "LI", &disp, &length_bits) != 0)
+        xed_decoded_inst_set_memory_displacement_bits(self->decoded_inst, disp,
+            length_bits);
+    return NULL;
+}
+
+
+/* Operand information related methods. */
+
+static PyObject *get_noperands(instruction_t *self, PyObject *args)
+{
+    return PyInt_FromSize_t(xed_decoded_inst_noperands(self->decoded_inst));
+}
+
+static PyObject *get_operand(instruction_t *self, PyObject *args)
+{
+    xed_decoded_inst_t *decoded_inst = self->decoded_inst;
+    const xed_inst_t *inst = self->inst;
     unsigned int i;
     PyObject *r = NULL;
 
@@ -121,6 +232,63 @@ static PyObject *get_operand(PyObject *self, PyObject *args)
         r = (PyObject *)new_operand(xed_inst_operand(inst, i));
     return r;
 }
+
+static PyObject *get_base_reg(instruction_t *self, PyObject *args)
+{
+    unsigned int mem_idx;
+    xed_reg_enum_t reg;
+    PyObject *r = NULL;
+
+    if(PyArg_ParseTuple(args, "I", &mem_idx) != 0)
+    {
+        reg = xed_decoded_inst_get_base_reg(self->decoded_inst, mem_idx);
+        r = (PyObject *)PyInt_FromLong(reg);
+    }
+    return r;
+}
+
+static PyObject *get_index_reg(instruction_t *self, PyObject *args)
+{
+    unsigned int mem_idx;
+    xed_reg_enum_t reg;
+    PyObject *r = NULL;
+
+    if(PyArg_ParseTuple(args, "I", &mem_idx) != 0)
+    {
+        reg = xed_decoded_inst_get_index_reg(self->decoded_inst, mem_idx);
+        r = (PyObject *)PyInt_FromLong(reg);
+    }
+    return r;
+}
+
+static PyObject *get_reg(instruction_t *self, PyObject *args)
+{
+    int reg_operand;
+    xed_reg_enum_t reg;
+    PyObject *r = NULL;
+
+    if(PyArg_ParseTuple(args, "i", &reg_operand) != 0)
+    {
+        reg = xed_decoded_inst_get_reg(self->decoded_inst, reg_operand);
+        r = (PyObject *)PyInt_FromLong(reg);
+    }
+    return r;
+}
+
+static PyObject *get_seg_reg(instruction_t *self, PyObject *args)
+{
+    unsigned int mem_idx;
+    xed_reg_enum_t reg;
+    PyObject *r = NULL;
+
+    if(PyArg_ParseTuple(args, "I", &mem_idx) != 0)
+    {
+        reg = xed_decoded_inst_get_seg_reg(self->decoded_inst, mem_idx);
+        r = (PyObject *)PyInt_FromLong(reg);
+    }
+    return r;
+}
+
 
 
 static PyMemberDef members[] =
@@ -132,26 +300,38 @@ static PyMemberDef members[] =
 
 static PyMethodDef methods[] =
 {
-    {"get_noperands", get_noperands, METH_NOARGS,
-        "Equivalent to `xed_decoded_inst_noperands()'"},
-    {"get_category", get_category, METH_NOARGS,
-        "Equivalent to `xed_decoded_inst_get_category()'"},
-    {"get_extension", get_extension, METH_NOARGS,
-        "Equivalent to `xed_decoded_inst_get_extension()'"},
-    {"get_iclass", get_iclass, METH_NOARGS,
-        "Equivalent to `xed_decoded_inst_get_iclass()'"},
-    {"get_iform", get_iform, METH_NOARGS,
-        "Equivalent to `xed_decoded_inst_get_iform()'"},
-    {"get_length", get_length, METH_NOARGS,
-        "Equivalent to `xed_decoded_inst_get_length()'"},
-    {"get_attribute", get_attribute, METH_VARARGS,
-        "Equivalent to `xed_decoded_inst_get_attribute()'"},
-    {"get_branch_displacement", get_branch_displacement, METH_NOARGS,
-        "Equivalent to `xed_decoded_inst_get_branch_displacement'"},
-    {"dump_intel_format", dump_intel_format, METH_NOARGS,
-        "Equivalent to `xed_decoded_inst_dump_intel_format()'"},
-    {"get_operand", get_operand, METH_VARARGS,
-        "Equivalent to `xed_inst_operand()'"},
+    /* Instruction information related methods. */
+    M_NOARGS(get_category),
+    M_NOARGS(get_extension),
+    M_NOARGS(get_iclass),
+    M_NOARGS(get_iform),
+    M_VARARGS(get_attribute),
+    M_NOARGS(get_length),
+    M_NOARGS(conditionally_writes_registers),
+    M_NOARGS(dump_intel_format),
+
+    /* Branch displacement related methods (getters & setters). */
+    M_NOARGS(get_branch_displacement),
+    M_NOARGS(get_branch_displacement_width),
+    M_NOARGS(get_branch_displacement_width_bits),
+    M_VARARGS(set_branch_displacement),
+    M_VARARGS(set_branch_displacement_bits),
+
+    /* Memory displacement related methods (getters & setters). */
+    M_VARARGS(get_memory_displacement),
+    M_VARARGS(get_memory_displacement_width),
+    M_VARARGS(get_memory_displacement_width_bits),
+    M_VARARGS(set_memory_displacement),
+    M_VARARGS(set_memory_displacement_bits),
+
+    /* Operand information related methods. */
+    M_NOARGS(get_noperands),
+    M_VARARGS(get_operand),
+    M_VARARGS(get_base_reg),
+    M_VARARGS(get_index_reg),
+    M_VARARGS(get_reg),
+    M_VARARGS(get_seg_reg),
+
     {NULL}
 };
 

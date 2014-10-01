@@ -1,3 +1,15 @@
+2014-10-01 huku <huku@grhack.net>
+
+    * Implemented several new methods in class `Instruction'.
+    * Cleaned up and reordered function definitions in "instruction.c".
+    * `XED_REG_XXX' constants are now visible to Python.
+    * Added `M_VARARGS()' and `M_NOARGS()' macros; `PyMethodDef[]' definitions
+      are now much more readable.
+    * Modified all `PyCFunction' definitions to receive specific data types as
+      `self' instead of `PyObject *' (this is how they do it in the official
+      Python sources).
+
+
 2014-09-16 huku <huku@grhack.net>
 
     * Fixed `snprintf()' related compiler warning on 64-bit systems.

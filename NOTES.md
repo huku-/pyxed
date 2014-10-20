@@ -21,4 +21,4 @@ settled down to the following set of simple guidelines:
     **PyLong_FromUnsignedLong()**.
 
   * For return values of type **xed_*_enum_t**, use **PyInt_FromLong()**
-    (according to the C standard, enumerations are treated as **int**s).
+    (according to the C standard, enumerations are treated as **int** values).

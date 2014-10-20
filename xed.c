@@ -127,14 +127,14 @@ static PyMemberDef members[] =
         "Offset in instruction text to start decoding from"},
     {"runtime_address", T_OBJECT, offsetof(xed_t, runtime_address), 0,
         "Runtime address of the instruction text being disassembled"},
-    {NULL}
+    {NULL, 0, 0, 0, NULL}
 };
 
 static PyMethodDef methods[] =
 {
     M_VARARGS(set_mode),
     M_NOARGS(decode),
-    {NULL}
+    M_NULL
 };
 
 static PyTypeObject type =

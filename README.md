@@ -1,6 +1,6 @@
 # Python bindings for Intel's XED2
 
-huku <huku@grhack.net>
+huku &lt;[huku@grhack.net](@grhack.net)&gt;
 
 ## About
 
@@ -21,10 +21,5 @@ To compile **pyxed**, set appropriate paths for **PYTHON27_PREFIX** and
 
 ## Using pyxed
 
-For information on how to use **pyxed**, have a look at **test.py**.
+For information on how to use **pyxed**, have a look at **examples/**.
 
-```
-$ python test.py e90000000090
-10001000 jmp 0x10001005
-10001005 nop
-```

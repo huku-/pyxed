@@ -18,7 +18,7 @@ PyObject *invalid_offset;
 
 static PyMethodDef methods[] =
 {
-    {NULL}
+    M_NULL
 };
 
 
@@ -108,6 +108,23 @@ static void register_constants(PyObject *module)
     {
         name = xed_operand_type_enum_t2str((xed_operand_type_enum_t)i);
         snprintf(full_name, sizeof(full_name), "XED_OPERAND_TYPE_%s", name);
+        PyModule_AddObject(module, full_name, PyInt_FromLong(i));
+    }
+
+    /* Constants from "xed-operand-element-xtype-enum.h". */
+    for(i = XED_OPERAND_XTYPE_INVALID; i <= XED_OPERAND_XTYPE_LAST; i++)
+    {
+        name = xed_operand_element_xtype_enum_t2str(
+            (xed_operand_element_xtype_enum_t)i);
+        snprintf(full_name, sizeof(full_name), "XED_OPERAND_XTYPE_%s", name);
+        PyModule_AddObject(module, full_name, PyInt_FromLong(i));
+    }
+
+    /* Constants from "xed-operand-width-enum.h". */
+    for(i = XED_OPERAND_WIDTH_INVALID; i <= XED_OPERAND_WIDTH_LAST; i++)
+    {
+        name = xed_operand_width_enum_t2str((xed_operand_width_enum_t)i);
+        snprintf(full_name, sizeof(full_name), "XED_OPERAND_WIDTH_%s", name);
         PyModule_AddObject(module, full_name, PyInt_FromLong(i));
     }
 

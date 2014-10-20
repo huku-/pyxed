@@ -1,3 +1,16 @@
+2014-10-20 huku <huku@grhack.net>
+
+    * Implemented new methods in class `Instruction' and class `Operand'.
+    * Cleaned up and reordered function definitions in "operand.c".
+    * Fixed several compiler warnings on LLVM (Mac OS X).
+    * Functions `is_register()' and `is_memory_addressing_register()' of class
+      `Operand' were modified to return a boolean.
+    * `XED_OPERAND_WIDTH_XXX' and `XED_OPERAND_XTYPE_XXX' constants are now 
+      visible to Python.
+    * Added "NOTES.md".
+    * Removed "test.py" and added a couple of examples in "examples/".
+
+
 2014-10-01 huku <huku@grhack.net>
 
     * Implemented several new methods in class `Instruction'.

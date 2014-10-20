@@ -8,6 +8,8 @@
 #include "operand.h"
 
 
+/* Operand information related methods. */
+
 static PyObject *get_imm(operand_t *self, PyObject *args)
 {
     return PyInt_FromLong(xed_operand_imm(self->operand));
@@ -50,6 +52,17 @@ static PyObject *get_width_bits(operand_t *self, PyObject *args)
     return r;
 }
 
+static PyObject *is_memory_addressing_register(operand_t *self, PyObject *args)
+{
+    return PyBool_FromLong(xed_operand_is_memory_addressing_register(
+        xed_operand_name(self->operand)));
+}
+
+static PyObject *is_register(operand_t *self, PyObject *args)
+{
+    return PyBool_FromLong(xed_operand_is_register(xed_operand_name(
+        self->operand)));
+}
 
 /* There were two reasons that we decided _not_ to name the following function
  * `print()'. First, `print' is a reserved word in Python. Second, `dump()' is
@@ -64,21 +77,56 @@ static PyObject *dump(operand_t *self, PyObject *args)
 }
 
 
-static PyObject *is_memory_addressing_register(operand_t *self, PyObject *args)
+/* Read/write information related methods. */
+
+static PyObject *is_conditional_read(operand_t *self, PyObject *args)
 {
-    return PyInt_FromSize_t(xed_operand_is_memory_addressing_register(
-        xed_operand_name(self->operand)));
+    return PyBool_FromLong(xed_operand_conditional_read(self->operand));
 }
 
-static PyObject *is_register(operand_t *self, PyObject *args)
+static PyObject *is_conditional_write(operand_t *self, PyObject *args)
 {
-    return PyInt_FromSize_t(xed_operand_is_register(xed_operand_name(
-        self->operand)));
+    return PyBool_FromLong(xed_operand_conditional_write(self->operand));
 }
+
+static PyObject *is_read(operand_t *self, PyObject *args)
+{
+    return PyBool_FromLong(xed_operand_read(self->operand));
+}
+
+static PyObject *is_read_and_written(operand_t *self, PyObject *args)
+{
+    return PyBool_FromLong(xed_operand_read_and_written(self->operand));
+}
+
+static PyObject *is_read_only(operand_t *self, PyObject *args)
+{
+    return PyBool_FromLong(xed_operand_read_only(self->operand));
+}
+
+static PyObject *is_written(operand_t *self, PyObject *args)
+{
+    return PyBool_FromLong(xed_operand_written(self->operand));
+}
+
+static PyObject *is_written_only(operand_t *self, PyObject *args)
+{
+    return PyBool_FromLong(xed_operand_written_only(self->operand));
+}
+
+/* The original name is `xed_operand_rw()' but `get_rw_action()' is far more
+ * descriptive and intuitive.
+ */
+static PyObject *get_rw_action(operand_t *self, PyObject *args)
+{
+    return PyInt_FromLong(xed_operand_rw(self->operand));
+}
+
 
 
 static PyMethodDef methods[] =
 {
+    /* Operand information related methods. */
     M_NOARGS(get_imm),
     M_NOARGS(get_name),
     M_NOARGS(get_visibility),
@@ -86,10 +134,21 @@ static PyMethodDef methods[] =
     M_NOARGS(get_xtype),
     M_NOARGS(get_width),
     M_VARARGS(get_width_bits),
-    M_NOARGS(dump),
     M_NOARGS(is_memory_addressing_register),
     M_NOARGS(is_register),
-    {NULL}
+    M_NOARGS(dump),
+
+    /* Read/write information related methods. */
+    M_NOARGS(is_conditional_read),
+    M_NOARGS(is_conditional_write),
+    M_NOARGS(is_read),
+    M_NOARGS(is_read_and_written),
+    M_NOARGS(is_read_only),
+    M_NOARGS(is_written),
+    M_NOARGS(is_written_only),
+    M_NOARGS(get_rw_action),
+
+    M_NULL
 };
 
 static PyTypeObject type =

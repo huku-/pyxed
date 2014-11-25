@@ -313,6 +313,24 @@ static PyObject *get_immediate_width_bits(instruction_t *self, PyObject *args)
     return (PyObject *)PyLong_FromUnsignedLong(width);
 }
 
+static PyObject *get_second_immediate(instruction_t *self, PyObject *args)
+{
+    xed_uint8_t imm = xed_decoded_inst_get_second_immediate(self->decoded_inst);
+    return (PyObject *)PyLong_FromUnsignedLong(imm);
+}
+
+static PyObject *get_signed_immediate(instruction_t *self, PyObject *args)
+{
+    xed_int32_t imm = xed_decoded_inst_get_signed_immediate(self->decoded_inst);
+    return (PyObject *)PyLong_FromLong(imm);
+}
+
+static PyObject *get_unsigned_immediate(instruction_t *self, PyObject *args)
+{
+    xed_uint64_t imm;
+    imm = xed_decoded_inst_get_unsigned_immediate(self->decoded_inst);
+    return (PyObject *)PyLong_FromUnsignedLongLong(imm);
+}
 
 
 static PyMemberDef members[] =
@@ -360,6 +378,9 @@ static PyMethodDef methods[] =
     M_NOARGS(get_immediate_is_signed),
     M_NOARGS(get_immediate_width),
     M_NOARGS(get_immediate_width_bits),
+    M_NOARGS(get_second_immediate),
+    M_NOARGS(get_signed_immediate),
+    M_NOARGS(get_unsigned_immediate),
 
     M_NULL
 };

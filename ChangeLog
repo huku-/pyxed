@@ -1,3 +1,8 @@
+2014-11-25 huku <huku@grhack.net>
+
+    * Implemented new methods in class `Instruction'.
+
+
 2014-10-20 huku <huku@grhack.net>
 
     * Implemented new methods in class `Instruction' and class `Operand'.

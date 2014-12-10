@@ -8,6 +8,7 @@
 #include "check.h"
 #include "instruction.h"
 #include "operand.h"
+#include "rflags.h"
 
 
 /* Instruction information related methods. */
@@ -88,6 +89,33 @@ static PyObject *dump_intel_format(instruction_t *self, PyObject *args)
         r = PyString_FromString(tmp2);
     }
     return r;
+}
+
+static PyObject *uses_rflags(instruction_t *self, PyObject *args)
+{
+    return (PyObject *)PyBool_FromLong(xed_decoded_inst_uses_rflags(
+        self->decoded_inst));
+}
+
+static PyObject *get_rflags_read(instruction_t *self, PyObject *args)
+{
+    const xed_simple_flag_t *flags;
+    flags = xed_decoded_inst_get_rflags_info(self->decoded_inst);
+    return (PyObject *)new_rflags(&flags->read);
+}
+
+static PyObject *get_rflags_undefined(instruction_t *self, PyObject *args)
+{
+    const xed_simple_flag_t *flags;
+    flags = xed_decoded_inst_get_rflags_info(self->decoded_inst);
+    return (PyObject *)new_rflags(&flags->undefined);
+}
+
+static PyObject *get_rflags_written(instruction_t *self, PyObject *args)
+{
+    const xed_simple_flag_t *flags;
+    flags = xed_decoded_inst_get_rflags_info(self->decoded_inst);
+    return (PyObject *)new_rflags(&flags->written);
 }
 
 
@@ -333,6 +361,60 @@ static PyObject *get_unsigned_immediate(instruction_t *self, PyObject *args)
 }
 
 
+/* Memory operand related methods. */
+
+static PyObject *get_number_of_memory_operands(instruction_t *self,
+        PyObject *args)
+{
+    xed_uint_t num = xed_decoded_inst_number_of_memory_operands(
+        self->decoded_inst);
+    return (PyObject *)PyLong_FromUnsignedLong(num);
+}
+
+static PyObject *is_mem_read(instruction_t *self, PyObject *args)
+{
+    unsigned int mem_idx;
+    xed_bool_t flag;
+    PyObject *r = NULL;
+
+    if(PyArg_ParseTuple(args, "I", &mem_idx) != 0)
+    {
+        flag = xed_decoded_inst_mem_read(self->decoded_inst, mem_idx);
+        r = (PyObject *)PyBool_FromLong(flag);
+    }
+    return r;
+}
+
+static PyObject *is_mem_written(instruction_t *self, PyObject *args)
+{
+    unsigned int mem_idx;
+    xed_bool_t flag;
+    PyObject *r = NULL;
+
+    if(PyArg_ParseTuple(args, "I", &mem_idx) != 0)
+    {
+        flag = xed_decoded_inst_mem_written(self->decoded_inst, mem_idx);
+        r = (PyObject *)PyBool_FromLong(flag);
+    }
+    return r;
+}
+
+static PyObject *is_mem_written_only(instruction_t *self, PyObject *args)
+{
+    unsigned int mem_idx;
+    xed_bool_t flag;
+    PyObject *r = NULL;
+
+    if(PyArg_ParseTuple(args, "I", &mem_idx) != 0)
+    {
+        flag = xed_decoded_inst_mem_written_only(self->decoded_inst, mem_idx);
+        r = (PyObject *)PyBool_FromLong(flag);
+    }
+    return r;
+}
+
+
+
 static PyMemberDef members[] =
 {
     {"runtime_address", T_OBJECT, offsetof(instruction_t, runtime_address), 0,
@@ -351,6 +433,10 @@ static PyMethodDef methods[] =
     M_NOARGS(get_length),
     M_NOARGS(conditionally_writes_registers),
     M_NOARGS(dump_intel_format),
+    M_NOARGS(uses_rflags),
+    M_NOARGS(get_rflags_read),
+    M_NOARGS(get_rflags_undefined),
+    M_NOARGS(get_rflags_written),
 
     /* Branch displacement related methods (getters & setters). */
     M_NOARGS(get_branch_displacement),
@@ -381,6 +467,12 @@ static PyMethodDef methods[] =
     M_NOARGS(get_second_immediate),
     M_NOARGS(get_signed_immediate),
     M_NOARGS(get_unsigned_immediate),
+
+    /* Memory operand related methods. */
+    M_NOARGS(get_number_of_memory_operands),
+    M_VARARGS(is_mem_read),
+    M_VARARGS(is_mem_written),
+    M_VARARGS(is_mem_written_only),
 
     M_NULL
 };

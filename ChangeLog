@@ -1,3 +1,11 @@
+2014-12-10 huku <huku@grhack.net>
+
+    * Introduced new class `Rflags' that represents the CPU flags register
+      contents.
+    * Implemented new methods in class `Instruction'.
+    * Added "dump_rflags.py" in "examples/".
+
+
 2014-11-25 huku <huku@grhack.net>
 
     * Implemented new methods in class `Instruction'.

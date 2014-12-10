@@ -7,6 +7,7 @@
 #include "xed.h"
 #include "instruction.h"
 #include "operand.h"
+#include "rflags.h"
 
 
 /* Exceptions thrown by this module should go here. Don't forget to also declare
@@ -171,6 +172,7 @@ PyMODINIT_FUNC initpyxed(void)
     module = Py_InitModule("pyxed", methods);
     register_constants(module);
     register_exceptions(module);
+    register_rflags_object(module);
     register_operand_object(module);
     register_instruction_object(module);
     register_xed_object(module);

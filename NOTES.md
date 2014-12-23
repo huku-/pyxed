@@ -2,7 +2,7 @@
 
 Scraps of notes on **pyxed** development.
 
-huku &lt;[huku@grhack.net](huku@grhack.net)&gt;
+huku &lt;[huku@grhack.net](mailto:huku@grhack.net)&gt;
 
 
 ## Converting C datatypes to Python PyObjects

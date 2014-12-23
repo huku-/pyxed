@@ -1,5 +1,5 @@
-#ifndef _XED_H_
-#define _XED_H_
+#ifndef _DECODER_H_
+#define _DECODER_H_
 
 #include "includes.h"
 
@@ -16,6 +16,6 @@ typedef struct
 } xed_t;
 
 
-void register_xed_object(PyObject *);
+void register_decoder_object(PyObject *);
 
 #endif /* _XED_H_ */

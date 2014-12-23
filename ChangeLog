@@ -1,3 +1,9 @@
+2014-12-23 huku <huku@grhack.net>
+
+    * Class `XED' was renamed to `Decoder'.
+    * Fixed typo in "README.md" and "NOTES.md".
+
+
 2014-12-10 huku <huku@grhack.net>
 
     * Introduced new class `Rflags' that represents the CPU flags register

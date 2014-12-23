@@ -1,12 +1,12 @@
 /* pyxed - Python bindings for Intel's XED2
  * huku <huku@grhack.net>
  *
- * xed.c - Exports class `XED', the main decoder object.
+ * xed.c - Exports class `Decoder', the main decoder object.
  */
 #include "includes.h"
 #include "pyxed.h"
 #include "check.h"
-#include "xed.h"
+#include "decoder.h"
 #include "instruction.h"
 
 
@@ -140,7 +140,7 @@ static PyMethodDef methods[] =
 static PyTypeObject type =
 {
     PyObject_HEAD_INIT(NULL)
-    .tp_name = "pyxed.XED",
+    .tp_name = "pyxed.Decoder",
     .tp_basicsize = sizeof(xed_t),
     .tp_flags = Py_TPFLAGS_DEFAULT,
     .tp_doc = "Main decoder object",
@@ -151,12 +151,12 @@ static PyTypeObject type =
 };
 
 
-void register_xed_object(PyObject *module)
+void register_decoder_object(PyObject *module)
 {
     if(PyType_Ready(&type) == 0)
     {
         Py_INCREF(&type);
-        PyModule_AddObject(module, "XED", (PyObject *)&type);
+        PyModule_AddObject(module, "Decoder", (PyObject *)&type);
     }
 }
 

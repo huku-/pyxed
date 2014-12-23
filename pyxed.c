@@ -4,7 +4,7 @@
  * pyxed.c - Holds the extension's entry point.
  */
 #include "includes.h"
-#include "xed.h"
+#include "decoder.h"
 #include "instruction.h"
 #include "operand.h"
 #include "rflags.h"
@@ -175,6 +175,6 @@ PyMODINIT_FUNC initpyxed(void)
     register_rflags_object(module);
     register_operand_object(module);
     register_instruction_object(module);
-    register_xed_object(module);
+    register_decoder_object(module);
 }
 

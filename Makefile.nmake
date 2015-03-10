@@ -1,0 +1,31 @@
+PYTHON27_PREFIX=C:\Python27
+PYTHON27_HEADERS=$(PYTHON27_PREFIX)\include
+PYTHON27_LIBS=$(PYTHON27_PREFIX)\libs
+
+XED_PREFIX=C:\pin-2.14-71313-msvc10-windows\extras\xed-ia32
+# XED_PREFIX=C:\pin-2.14-71313-msvc10-windows\extras\xed-intel64
+XED_HEADERS=$(XED_PREFIX)\include
+XED_LIBS=$(XED_PREFIX)\lib
+
+
+OBJS=check.obj rflags.obj operand.obj instruction.obj decoder.obj pyxed.obj
+BIN=pyxed.pyd
+PDB=pyxed.pdb
+
+
+CFLAGS=/nologo /W3 /O2 /GS /Zi /I $(PYTHON27_HEADERS) /I $(XED_HEADERS) /MT
+
+
+# You can build 64bit binary using "/MACHINE:X64" below.
+LDFLAGS=/nologo /DEBUG /DYNAMICBASE /NXCOMPAT /PDB:$(PDB) \
+    /SAFESEH /WX /MACHINE:X86 /DLL \
+    /LIBPATH:$(PYTHON27_LIBS) /LIBPATH:$(XED_LIBS) \
+    /DEFAULTLIB:python27.lib /DEFAULTLIB:libxed.lib
+
+
+$(BIN): $(OBJS)
+	link $(OBJS) /OUT:$(BIN) $(LDFLAGS)
+
+clean:
+	del /F *.ilk *.obj *.dll *.lib *.pyd *.exp *.pdb
+

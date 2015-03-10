@@ -413,6 +413,19 @@ static PyObject *is_mem_written_only(instruction_t *self, PyObject *args)
     return r;
 }
 
+static PyObject *get_scale(instruction_t *self, PyObject *args)
+{
+    unsigned int mem_idx;
+    xed_uint_t scale;
+    PyObject *r = NULL;
+
+    if(PyArg_ParseTuple(args, "I", &mem_idx) != 0)
+    {
+        scale = xed_decoded_inst_get_scale(self->decoded_inst, mem_idx);
+        r = PyBool_FromLong(scale);
+    }
+    return r;
+}
 
 
 static PyMemberDef members[] =
@@ -473,20 +486,19 @@ static PyMethodDef methods[] =
     M_VARARGS(is_mem_read),
     M_VARARGS(is_mem_written),
     M_VARARGS(is_mem_written_only),
+    M_VARARGS(get_scale),
 
     M_NULL
 };
 
-static PyTypeObject type =
+
+/* See comment in "decoder.c" for more information. */
+static PyObject type_base =
 {
     PyObject_HEAD_INIT(NULL)
-    .tp_name = "pyxed.Instruction",
-    .tp_basicsize = sizeof(instruction_t),
-    .tp_flags = Py_TPFLAGS_DEFAULT,
-    .tp_doc = "Represents a decoded instruction",
-    .tp_methods = methods,
-    .tp_members = members
 };
+
+static PyTypeObject type;
 
 
 /* Allocate and initialize a new `Instruction' object given the associated
@@ -499,13 +511,26 @@ instruction_t *new_instruction(xed_decoded_inst_t *decoded_inst,
         (instruction_t *)PyType_GenericNew(&type, NULL, NULL);
     instruction->decoded_inst = decoded_inst;
     instruction->inst = xed_decoded_inst_inst(decoded_inst);
-    instruction->runtime_address = PyLong_FromLong(runtime_address);
+    instruction->runtime_address = PyLong_FromLong((long)runtime_address);
     return instruction;
 }
 
 
+/* Initialization of `pyxed.Instruction' type should go here. */
+static void initialize_instruction_type(PyTypeObject *type)
+{
+    *(PyObject *)type = type_base;
+    type->tp_name = "pyxed.Instruction";
+    type->tp_basicsize = sizeof(instruction_t);
+    type->tp_flags = Py_TPFLAGS_DEFAULT;
+    type->tp_doc = "Represents a decoded instruction";
+    type->tp_methods = methods;
+    type->tp_members = members;
+}
+
 void register_instruction_object(PyObject *module)
 {
+    initialize_instruction_type(&type);
     if(PyType_Ready(&type) == 0)
     {
         Py_INCREF(&type);

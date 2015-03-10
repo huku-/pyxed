@@ -1,7 +1,7 @@
 /* pyxed - Python bindings for Intel's XED2
  * huku <huku@grhack.net>
  *
- * xed.c - Exports class `Decoder', the main decoder object.
+ * decoder.c - Exports class `Decoder', the main decoder object.
  */
 #include "includes.h"
 #include "pyxed.h"
@@ -137,22 +137,42 @@ static PyMethodDef methods[] =
     M_NULL
 };
 
-static PyTypeObject type =
+
+/* When compiling on Microsoft Windows with older versions of Visual Studio, we
+ * can't use designated initializers for structure types; this C99 feature is
+ * not supported. To properly initialize a `PyTypeObject' and avoid compiler
+ * warnings, we first need to initialize a `PyObject' (fully initialized by
+ * `PyObject_HEAD_INIT()') and then assign the latter to the first. Have a look
+ * at `initialize_decoder_type()' below for more information.
+ */
+static PyObject type_base =
 {
     PyObject_HEAD_INIT(NULL)
-    .tp_name = "pyxed.Decoder",
-    .tp_basicsize = sizeof(xed_t),
-    .tp_flags = Py_TPFLAGS_DEFAULT,
-    .tp_doc = "Main decoder object",
-    .tp_methods = methods,
-    .tp_members = members,
-    .tp_init = init,
-    .tp_new = PyType_GenericNew
 };
 
+static PyTypeObject type;
+
+
+/* Initialization of `pyxed.Decoder' type should go here. */
+static void initialize_decoder_type(PyTypeObject *type)
+{
+    /* All Python structures are castable to `PyObject' and structure assignment
+     * is a well defined construct.
+     */
+    *(PyObject *)type = type_base;
+    type->tp_name = "pyxed.Decoder";
+    type->tp_basicsize = sizeof(xed_t);
+    type->tp_flags = Py_TPFLAGS_DEFAULT;
+    type->tp_doc = "Main decoder object";
+    type->tp_methods = methods;
+    type->tp_members = members;
+    type->tp_init = init;
+    type->tp_new = PyType_GenericNew;
+}
 
 void register_decoder_object(PyObject *module)
 {
+    initialize_decoder_type(&type);
     if(PyType_Ready(&type) == 0)
     {
         Py_INCREF(&type);

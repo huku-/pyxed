@@ -1,3 +1,14 @@
+2015-03-10 huku <huku@grhack.net>
+
+    * Added "Makefile.nmake"; makefile for Microsoft's `nmake' utility.
+    * Modified source to make it compile on Microsoft Windows (see "Makefile.nmake").
+    * Tested on latest PIN (pin-2.14-71313).
+    * Fixed compiler warning in "instruction.c".
+    * Fixed comment typo in "decoder.c".
+    * Implemented `get_scale()' in class `Instruction'.
+    * `XED_OPERAND_XXX' constants are now visible to Python.
+
+
 2014-12-23 huku <huku@grhack.net>
 
     * Class `XED' was renamed to `Decoder'.

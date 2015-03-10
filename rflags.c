@@ -30,15 +30,14 @@ static PyMemberDef members[] =
     {NULL, 0, 0, 0, NULL}
 };
 
-static PyTypeObject type =
+
+/* See comment in "decoder.c" for more information. */
+static PyObject type_base =
 {
     PyObject_HEAD_INIT(NULL)
-    .tp_name = "pyxed.Rflags",
-    .tp_basicsize = sizeof(rflags_t),
-    .tp_flags = Py_TPFLAGS_DEFAULT,
-    .tp_doc = "Represents the CPU flags register contents",
-    .tp_members = members
 };
+
+static PyTypeObject type;
 
 
 /* Allocate and initialize a new `Rflags' object given a `xed_flag_set_t'. */
@@ -65,8 +64,20 @@ rflags_t *new_rflags(const xed_flag_set_t *flags)
 }
 
 
+/* Initialization of `pyxed.Rflags' type should go here. */
+static void initialize_rflags_type(PyTypeObject *type)
+{
+    *(PyObject *)type = type_base;
+    type->tp_name = "pyxed.Rflags";
+    type->tp_basicsize = sizeof(rflags_t);
+    type->tp_flags = Py_TPFLAGS_DEFAULT;
+    type->tp_doc = "Represents the CPU flags register contents";
+    type->tp_members = members;
+}
+
 void register_rflags_object(PyObject *module)
 {
+    initialize_rflags_type(&type);
     if(PyType_Ready(&type) == 0)
     {
         Py_INCREF(&type);

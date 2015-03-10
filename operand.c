@@ -151,15 +151,14 @@ static PyMethodDef methods[] =
     M_NULL
 };
 
-static PyTypeObject type =
+
+/* See comment in "decoder.c" for more information. */
+static PyObject type_base =
 {
     PyObject_HEAD_INIT(NULL)
-    .tp_name = "pyxed.Operand",
-    .tp_basicsize = sizeof(operand_t),
-    .tp_flags = Py_TPFLAGS_DEFAULT,
-    .tp_doc = "Represents an instruction operand",
-    .tp_methods = methods
 };
+
+static PyTypeObject type;
 
 
 /* Allocate and initialize a new `Operand' object given the associated
@@ -173,8 +172,20 @@ operand_t *new_operand(const xed_operand_t *operand)
 }
 
 
+/* Initialization of `pyxed.Operand' type should go here. */
+static void initialize_operand_type(PyTypeObject *type)
+{
+    *(PyObject *)type = type_base;
+    type->tp_name = "pyxed.Operand";
+    type->tp_basicsize = sizeof(operand_t);
+    type->tp_flags = Py_TPFLAGS_DEFAULT;
+    type->tp_doc = "Represents an instruction operand";
+    type->tp_methods = methods;
+}
+
 void register_operand_object(PyObject *module)
 {
+    initialize_operand_type(&type);
     if(PyType_Ready(&type) == 0)
     {
         Py_INCREF(&type);

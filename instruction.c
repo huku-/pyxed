@@ -261,6 +261,38 @@ static PyObject *get_operand(instruction_t *self, PyObject *args)
     return r;
 }
 
+static PyObject *get_operand_length(instruction_t *self, PyObject *args)
+{
+    xed_decoded_inst_t *decoded_inst = self->decoded_inst;
+    unsigned int i, length;
+    PyObject *r = NULL;
+
+    if(PyArg_ParseTuple(args, "I", &i) != 0 &&
+            i < xed_decoded_inst_noperands(decoded_inst))
+    {
+        length = xed_decoded_inst_operand_length(decoded_inst, i);
+        r = PyLong_FromUnsignedLong(length);
+    }
+
+    return r;
+}
+
+static PyObject *get_operand_length_bits(instruction_t *self, PyObject *args)
+{
+    xed_decoded_inst_t *decoded_inst = self->decoded_inst;
+    unsigned int i, length;
+    PyObject *r = NULL;
+
+    if(PyArg_ParseTuple(args, "I", &i) != 0 &&
+            i < xed_decoded_inst_noperands(decoded_inst))
+    {
+        length = xed_decoded_inst_operand_length_bits(decoded_inst, i);
+        r = PyLong_FromUnsignedLong(length);
+    }
+
+    return r;
+}
+
 static PyObject *get_base_reg(instruction_t *self, PyObject *args)
 {
     unsigned int mem_idx;
@@ -371,6 +403,22 @@ static PyObject *get_number_of_memory_operands(instruction_t *self,
     return (PyObject *)PyLong_FromUnsignedLong(num);
 }
 
+static PyObject *get_memory_operand_length(instruction_t *self, PyObject *args)
+{
+    xed_decoded_inst_t *decoded_inst = self->decoded_inst;
+    unsigned int i, length;
+    PyObject *r = NULL;
+
+    if(PyArg_ParseTuple(args, "I", &i) != 0 &&
+            i < xed_decoded_inst_number_of_memory_operands(decoded_inst))
+    {
+        length = xed_decoded_inst_get_memory_operand_length(decoded_inst, i);
+        r = PyLong_FromUnsignedLong(length);
+    }
+
+    return r;
+}
+
 static PyObject *is_mem_read(instruction_t *self, PyObject *args)
 {
     unsigned int mem_idx;
@@ -468,6 +516,8 @@ static PyMethodDef methods[] =
     /* Operand information related methods. */
     M_NOARGS(get_noperands),
     M_VARARGS(get_operand),
+    M_VARARGS(get_operand_length),
+    M_VARARGS(get_operand_length_bits),
     M_VARARGS(get_base_reg),
     M_VARARGS(get_index_reg),
     M_VARARGS(get_reg),
@@ -483,6 +533,7 @@ static PyMethodDef methods[] =
 
     /* Memory operand related methods. */
     M_NOARGS(get_number_of_memory_operands),
+    M_VARARGS(get_memory_operand_length),
     M_VARARGS(is_mem_read),
     M_VARARGS(is_mem_written),
     M_VARARGS(is_mem_written_only),

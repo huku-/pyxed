@@ -8,6 +8,8 @@ XED_HEADERS=$(XED_PREFIX)/include
 XED_LIBS=$(XED_PREFIX)/lib
 
 W=-Wall -Wextra \
+    -Wno-unknown-warning \
+    -Wno-unknown-warning-option \
     -Wno-unused-parameter \
     -Wno-old-style-declaration \
     -Wno-strict-aliasing
@@ -15,7 +17,7 @@ W=-Wall -Wextra \
 CFLAGS=-fPIC -O2 -I$(PYTHON27_HEADERS) -I$(XED_HEADERS) $(W) -ggdb
 LDFLAGS=-L$(PYTHON27_LIBS) -lpython2.7 -L$(XED_LIBS) -lxed -shared
 
-OBJS=check.o rflags.o operand.o instruction.o decoder.o pyxed.o
+OBJS=check.o rflags.o operand.o instruction.o decoder.o encoder.o pyxed.o
 BIN=pyxed.so
 
 CC=cc

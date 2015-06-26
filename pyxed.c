@@ -107,7 +107,7 @@ static void register_constants(PyObject *module)
     /* Constants from "xed-operand-enum.h". */
     for(i = XED_OPERAND_INVALID; i <= XED_OPERAND_LAST; i++)
     {
-        name = xed_operand_enum_t2str((xed_operand_type_enum_t)i);
+        name = xed_operand_enum_t2str((xed_operand_enum_t)i);
         snprintf(full_name, sizeof(full_name), "XED_OPERAND_%s", name);
         PyModule_AddObject(module, full_name, PyInt_FromLong(i));
     }

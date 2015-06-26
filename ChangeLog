@@ -1,3 +1,12 @@
+2015-06-26 huku <huku@grhack.net>
+
+    * Fixed invalid typecast in "pyxed.c".
+    * Implemented `get_operand_length()', `get_operand_length_bits()' and
+      `get_memory_operand_length()' in class `Instruction'.
+    * Updated "README.md".
+    * Added "encoder.c" and "encoder.h".
+
+
 2015-03-10 huku <huku@grhack.net>
 
     * Added "Makefile.nmake"; makefile for Microsoft's `nmake' utility.

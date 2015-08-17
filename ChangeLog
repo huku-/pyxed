@@ -1,3 +1,9 @@
+2015-08-17 huku <huku@grhack.net>
+
+    * Renamed `InvalidOffsetException' to `InvalidOffsetError'.
+    * One year of `pyxed' development; it's not WIP any more.
+
+
 2015-06-26 huku <huku@grhack.net>
 
     * Fixed invalid typecast in "pyxed.c".

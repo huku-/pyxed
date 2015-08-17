@@ -162,10 +162,10 @@ static void register_exceptions(PyObject *module)
         PyExc_StandardError, NULL);
     PyModule_AddObject(module, "InvalidInstructionError", invalid_instruction);
 
-    /* Initialize `InvalidOffsetException' exception object. */
-    invalid_offset = PyErr_NewException("pyxed.InvalidOffsetException",
+    /* Initialize `InvalidOffsetError' exception object. */
+    invalid_offset = PyErr_NewException("pyxed.InvalidOffsetError",
         PyExc_StandardError, NULL);
-    PyModule_AddObject(module, "InvalidOffsetException", invalid_offset);
+    PyModule_AddObject(module, "InvalidOffsetError", invalid_offset);
 }
 
 

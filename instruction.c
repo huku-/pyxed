@@ -470,7 +470,7 @@ static PyObject *get_scale(instruction_t *self, PyObject *args)
     if(PyArg_ParseTuple(args, "I", &mem_idx) != 0)
     {
         scale = xed_decoded_inst_get_scale(self->decoded_inst, mem_idx);
-        r = PyBool_FromLong(scale);
+        r = (PyObject *)PyLong_FromUnsignedLong(scale);
     }
     return r;
 }

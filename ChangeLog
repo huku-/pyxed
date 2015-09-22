@@ -1,3 +1,9 @@
+2015-09-22 huku <huku@grhack.net>
+
+    * Renamed `get_immediate_is_signed()' to `is_immediate_signed()'.
+    * `XED_OPVIS_XXX' constants are now visible to Python.
+
+
 2015-09-21 huku <huku@grhack.net>
 
     * Fixed bug (invalid return type) in `get_scale()'.
@@ -55,7 +61,7 @@
     * Fixed several compiler warnings on LLVM (Mac OS X).
     * Functions `is_register()' and `is_memory_addressing_register()' of class
       `Operand' were modified to return a boolean.
-    * `XED_OPERAND_WIDTH_XXX' and `XED_OPERAND_XTYPE_XXX' constants are now 
+    * `XED_OPERAND_WIDTH_XXX' and `XED_OPERAND_XTYPE_XXX' constants are now
       visible to Python.
     * Added "NOTES.md".
     * Removed "test.py" and added a couple of examples in "examples/".

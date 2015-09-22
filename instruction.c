@@ -352,11 +352,11 @@ static PyObject *get_seg_reg(instruction_t *self, PyObject *args)
 
 /* Immediate information related methods. */
 
-static PyObject *get_immediate_is_signed(instruction_t *self, PyObject *args)
+static PyObject *is_immediate_signed(instruction_t *self, PyObject *args)
 {
     xed_uint_t is_signed;
     is_signed = xed_decoded_inst_get_immediate_is_signed(self->decoded_inst);
-    return (PyObject *)PyLong_FromUnsignedLong(is_signed);
+    return (PyObject *)PyBool_FromLong(is_signed);
 }
 
 static PyObject *get_immediate_width(instruction_t *self, PyObject *args)
@@ -524,7 +524,7 @@ static PyMethodDef methods[] =
     M_VARARGS(get_seg_reg),
 
     /* Immediate information related methods. */
-    M_NOARGS(get_immediate_is_signed),
+    M_NOARGS(is_immediate_signed),
     M_NOARGS(get_immediate_width),
     M_NOARGS(get_immediate_width_bits),
     M_NOARGS(get_second_immediate),

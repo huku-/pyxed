@@ -137,6 +137,15 @@ static void register_constants(PyObject *module)
         PyModule_AddObject(module, full_name, PyInt_FromLong(i));
     }
 
+    /* Constants from "xed-operand-visibility-enum.h". */
+    for(i = XED_OPVIS_INVALID; i <= XED_OPVIS_LAST; i++)
+    {
+        name = xed_operand_visibility_enum_t2str(
+            (xed_operand_visibility_enum_t)i);
+        snprintf(full_name, sizeof(full_name), "XED_OPVIS_%s", name);
+        PyModule_AddObject(module, full_name, PyInt_FromLong(i));
+    }
+
     /* Constants from "xed-attribute-enum.h". */
     for(i = XED_ATTRIBUTE_INVALID; i <= XED_ATTRIBUTE_LAST; i++)
     {

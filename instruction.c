@@ -64,30 +64,24 @@ static PyObject *conditionally_writes_registers(instruction_t *self,
 static PyObject *dump_intel_format(instruction_t *self, PyObject *args)
 {
     xed_decoded_inst_t *decoded_inst = self->decoded_inst;
-    PyObject *r = NULL;
-    xed_uint64_t runtime_address;
     char tmp1[64], tmp2[96];
 
-    if(is_int_or_long(self->runtime_address))
-    {
-        runtime_address = PyLong_AsLong(self->runtime_address);
+    PyObject *r = NULL;
 
-        /* In Pin versions before "pin-2.14-*", `xed_format_context()' takes 6
-         * parameters instead of 7. Unfortunately, there's no consistent way of
-         * dumping instructions between various XED versions and there's no easy
-         * way of detecting the actual XED version at compile time.
-         */
-        xed_format_context(XED_SYNTAX_INTEL, decoded_inst, tmp1,
-            sizeof(tmp1) - 1, runtime_address, NULL, NULL);
+    /* In Pin versions before "pin-2.14-*", `xed_format_context()' takes 6
+     * parameters instead of 7. Unfortunately, there's no consistent way of
+     * dumping instructions between various XED versions and there's no easy
+     * way of detecting the actual XED version at compile time.
+     */
+    xed_format_context(XED_SYNTAX_INTEL, decoded_inst, tmp1, sizeof(tmp1) - 1,
+        self->runtime_address, NULL, NULL);
 
-        if(xed_decoded_inst_get_machine_mode_bits(decoded_inst) == 64)
-            snprintf(tmp2, sizeof(tmp2), "%.16llx %s",
-                (unsigned long long)runtime_address, tmp1);
-        else
-            snprintf(tmp2, sizeof(tmp2), "%.8lx %s",
-                (unsigned long)runtime_address, tmp1);
-        r = PyString_FromString(tmp2);
-    }
+    if(xed_decoded_inst_get_machine_mode_bits(decoded_inst) == 64)
+        snprintf(tmp2, sizeof(tmp2), "%.16llx %s", self->runtime_address, tmp1);
+    else
+        snprintf(tmp2, sizeof(tmp2), "%.8llx %s", self->runtime_address, tmp1);
+
+    r = PyString_FromString(tmp2);
     return r;
 }
 
@@ -478,8 +472,8 @@ static PyObject *get_scale(instruction_t *self, PyObject *args)
 
 static PyMemberDef members[] =
 {
-    {"runtime_address", T_OBJECT, offsetof(instruction_t, runtime_address), 0,
-        "Runtime address of this instruction"},
+    {"runtime_address", T_ULONGLONG, offsetof(instruction_t, runtime_address),
+        0, "Runtime address of this instruction"},
     {NULL, 0, 0, 0, NULL}
 };
 
@@ -562,10 +556,17 @@ instruction_t *new_instruction(xed_decoded_inst_t *decoded_inst,
         (instruction_t *)PyType_GenericNew(&type, NULL, NULL);
     instruction->decoded_inst = decoded_inst;
     instruction->inst = xed_decoded_inst_inst(decoded_inst);
-    instruction->runtime_address = PyLong_FromLong((long)runtime_address);
+    instruction->runtime_address = runtime_address;
     return instruction;
 }
 
+
+/* Destructor for `pyxed.Instruction' objects. */
+static void finalize_instruction_type(instruction_t *self)
+{
+    PyMem_Free(self->decoded_inst);
+    PyObject_Del((PyObject *)self);
+}
 
 /* Initialization of `pyxed.Instruction' type should go here. */
 static void initialize_instruction_type(PyTypeObject *type)
@@ -573,6 +574,7 @@ static void initialize_instruction_type(PyTypeObject *type)
     *(PyObject *)type = type_base;
     type->tp_name = "pyxed.Instruction";
     type->tp_basicsize = sizeof(instruction_t);
+    type->tp_dealloc = (destructor)finalize_instruction_type;
     type->tp_flags = Py_TPFLAGS_DEFAULT;
     type->tp_doc = "Represents a decoded instruction";
     type->tp_methods = methods;

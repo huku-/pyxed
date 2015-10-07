@@ -13,9 +13,8 @@
 
 static int init(PyObject *self, PyObject *args, PyObject *kwds)
 {
+    /* The call to `tp_alloc()' will initialize memory with zeros. */
     xed_t *xed = (xed_t *)self;
-    xed->itext_offset = PyLong_FromLong(0);
-    xed->runtime_address = PyLong_FromLong(0x10001000);
     xed->mmode = XED_MACHINE_MODE_LONG_COMPAT_32;
     xed->stack_addr_width = XED_ADDRESS_WIDTH_32b;
     return 0;
@@ -25,8 +24,7 @@ static int init(PyObject *self, PyObject *args, PyObject *kwds)
 static PyObject *decode(xed_t *self, PyObject *args)
 {
     xed_decoded_inst_t *decoded_inst;
-    xed_uint64_t runtime_address;
-    Py_ssize_t itext_offset;
+    unsigned long long runtime_address, itext_offset, itext_size;
     const xed_uint8_t *buf;
     unsigned int bytes;
     PyObject *r = NULL;
@@ -38,23 +36,11 @@ static PyObject *decode(xed_t *self, PyObject *args)
         goto _err;
     }
 
-    /* Make sure we have a valid runtime address. */
-    if(is_int_or_long(self->runtime_address) == 0)
-    {
-        PyErr_SetString(PyExc_TypeError, "Invalid runtime address");
-        goto _err;
-    }
-
-    /* Now verify we have a valid offset. */
-    if(is_int_or_long(self->itext_offset) == 0)
-    {
-        PyErr_SetString(PyExc_TypeError, "Invalid instruction text offset");
-        goto _err;
-    }
+    itext_offset = self->itext_offset;
+    itext_size = (unsigned long long)PyString_Size(self->itext);
 
     /* Have we finished decoding? */
-    itext_offset = PyLong_AsLong(self->itext_offset);
-    if(itext_offset == PyString_Size(self->itext))
+    if(itext_offset == itext_size)
     {
         Py_INCREF(Py_None);
         r = Py_None;
@@ -62,7 +48,7 @@ static PyObject *decode(xed_t *self, PyObject *args)
     }
 
     /* If the offset given is invalid, raise `InvalidOffsetException'. */
-    if(itext_offset < 0 || itext_offset > PyString_Size(self->itext))
+    if(itext_offset > itext_size)
     {
         PyErr_SetString(invalid_offset, "Invalid instruction text offset");
         goto _err;
@@ -78,8 +64,9 @@ static PyObject *decode(xed_t *self, PyObject *args)
     /* If we set `bytes' to something more than `XED_MAX_INSTRUCTION_BYTES', the
      * call to `xed_decode()' below may fail when decoding certain instructions.
      */
-    bytes = PyString_Size(self->itext) - itext_offset;
-    if(bytes > XED_MAX_INSTRUCTION_BYTES)
+    if(itext_size - itext_offset <= XED_MAX_INSTRUCTION_BYTES)
+        bytes = (unsigned int)(itext_size - itext_offset);
+    else
         bytes = XED_MAX_INSTRUCTION_BYTES;
     xed_decode(decoded_inst, buf, bytes);
 
@@ -88,9 +75,8 @@ static PyObject *decode(xed_t *self, PyObject *args)
      * `xed_decoded_inst_get_length()' will return a valid length even if the
      * decoded instruction is not valid).
      */
-    runtime_address = PyLong_AsLong(self->runtime_address) + itext_offset;
-    itext_offset += xed_decoded_inst_get_length(decoded_inst);
-    self->itext_offset = PyLong_FromLong(itext_offset);
+    runtime_address = self->runtime_address + itext_offset;
+    self->itext_offset += xed_decoded_inst_get_length(decoded_inst);
 
     /* If the instruction is not valid, raise `InvalidInstructionError'. */
     if(xed_decoded_inst_valid(decoded_inst) == 0)
@@ -123,9 +109,9 @@ static PyMemberDef members[] =
 {
     {"itext", T_OBJECT, offsetof(xed_t, itext), 0,
         "String object holding instruction text bytes"},
-    {"itext_offset", T_OBJECT, offsetof(xed_t, itext_offset), 0,
+    {"itext_offset", T_ULONGLONG, offsetof(xed_t, itext_offset), 0,
         "Offset in instruction text to start decoding from"},
-    {"runtime_address", T_OBJECT, offsetof(xed_t, runtime_address), 0,
+    {"runtime_address", T_ULONGLONG, offsetof(xed_t, runtime_address), 0,
         "Runtime address of the instruction text being disassembled"},
     {NULL, 0, 0, 0, NULL}
 };

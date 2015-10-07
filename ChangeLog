@@ -1,3 +1,11 @@
+2015-10-07 huku <huku@grhack.net>
+
+    * Fixed memory leak in method `decode()' of class `Decoder'.
+    * Switched type of member attributes in `Decoder' and `Instruction' from
+      `T_OBJECT' to `T_ULONGLONG'; results in faster and more efficient code
+      with less memory allocations.
+
+
 2015-09-22 huku <huku@grhack.net>
 
     * Renamed `get_immediate_is_signed()' to `is_immediate_signed()'.

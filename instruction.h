@@ -6,9 +6,7 @@
 typedef struct
 {
     PyObject_HEAD
-    /* Members exported via `members[]'. */
-    PyObject *runtime_address;
-    /* Members private to the implementation. */
+    unsigned long long runtime_address;
     xed_decoded_inst_t *decoded_inst;
     const xed_inst_t *inst;
 } instruction_t;

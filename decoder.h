@@ -6,11 +6,9 @@
 typedef struct
 {
     PyObject_HEAD
-    /* Members exported via `members[]'. */
     PyObject *itext;
-    PyObject *itext_offset;
-    PyObject *runtime_address;
-    /* Members private to the implementation. */
+    unsigned long long itext_offset;
+    unsigned long long runtime_address;
     xed_machine_mode_enum_t mmode;
     xed_address_width_enum_t stack_addr_width;
 } xed_t;

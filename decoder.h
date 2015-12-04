@@ -16,4 +16,4 @@ typedef struct
 
 void register_decoder_object(PyObject *);
 
-#endif /* _XED_H_ */
+#endif /* _DECODER_H_ */

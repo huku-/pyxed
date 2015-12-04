@@ -1,3 +1,12 @@
+2015-12-04 huku <huku@grhack.net>
+
+    * Fixed typo in "decoder.h".
+    * Replaced calls to `Py*_Check()' with `Py*_CheckExact()'.
+    * Modified "Makefile" to use "python2.7-config".
+    * Added link to precompiled binaries for Microsoft Windows and updated
+      "README.md" accordingly.
+
+
 2015-10-07 huku <huku@grhack.net>
 
     * Fixed memory leak in method `decode()' of class `Decoder'.

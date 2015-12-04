@@ -13,12 +13,12 @@
 
 int is_int(PyObject *object)
 {
-    return (object && PyInt_Check(object));
+    return (object && PyInt_CheckExact(object));
 }
 
 int is_long(PyObject *object)
 {
-    return (object && PyLong_Check(object));
+    return (object && PyLong_CheckExact(object));
 }
 
 int is_int_or_long(PyObject *object)
@@ -28,6 +28,6 @@ int is_int_or_long(PyObject *object)
 
 int is_string(PyObject *object)
 {
-    return (object && PyString_Check(object));
+    return (object && PyString_CheckExact(object));
 }
 

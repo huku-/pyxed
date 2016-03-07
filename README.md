@@ -50,6 +50,9 @@ C:\pyxed> "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
 C:\pyxed> nmake /F Makefile.nmake
 ```
 
+In newer versions of Visual Studio you might need to replace the **amd64**
+argument with **x86_amd64**.
+
 
 ### Compiling for use with IDAPython
 

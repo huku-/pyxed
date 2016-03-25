@@ -30,6 +30,32 @@ terminal, enter **pyxed**'s top-level directory and run **make**.
 Compiling on MacOS X requires the XCode command line utilities to be installed.
 Just open a terminal, enter **pyxed**'s top-level directory and run **make**.
 
+To test that everything works as expected, use the following command:
+
+```sh
+$ PYTHONPATH=. python examples/dump_asm.py 41414141
+```
+
+Depending on the XED version, you might get the following error when trying to
+import **pyxed** in your project.
+
+```
+Traceback (most recent call last):
+  File "examples/dump_asm.py", line 10, in <module>
+    import pyxed
+ImportError: dlopen(pyxed.so, 2): Library not loaded: obj-mac-clang-5.1.0-shared/libxed.dylib
+  Referenced from: pyxed.so
+  Reason: unsafe use of relative rpath obj-mac-clang-5.1.0-shared/libxed.dylib in pyxed.so with restricted binary
+```
+
+This is a problem related to hardcoded **rpath** values in Intel's **libxed.dylib**.
+To fix it, run the following command after substituting **/path/to/libxed.dylib**
+with the actual path of **libxed.dylib** in your filesystem.
+
+```sh
+$ install_name_tool -change obj-mac-clang-5.1.0-shared/libxed.dylib /path/to/libxed.dylib
+```
+
 
 ### Microsoft Windows
 
@@ -86,4 +112,10 @@ For information on how to use **pyxed**, have a look at **examples/**.
 
 If your compiler throws a warning, if you happen to hit a bug, or if you have
 any comments or suggestions please let me know.
+
+
+## References
+
+  * XED [downloads](https://software.intel.com/en-us/articles/xed-x86-encoder-decoder-software-library)
+  * XED [documentation](https://software.intel.com/sites/landingpage/xed/ref-manual/html/index.html)
 

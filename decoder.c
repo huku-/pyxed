@@ -68,6 +68,8 @@ static PyObject *decode(xed_t *self, PyObject *args)
         bytes = (unsigned int)(itext_size - itext_offset);
     else
         bytes = XED_MAX_INSTRUCTION_BYTES;
+
+    /* XXX: Check return value here? */
     xed_decode(decoded_inst, buf, bytes);
 
     /* Compute the instruction's runtime address and update saved offset by the

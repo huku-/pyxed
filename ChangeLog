@@ -1,3 +1,10 @@
+2016-03-25 huku <huku@grhack.net>
+
+    * Tested latest version of Intel's XED, which now comes as a standalone
+      library.
+	* Updated "README.md".
+
+
 2015-12-04 huku <huku@grhack.net>
 
     * Fixed typo in "decoder.h".

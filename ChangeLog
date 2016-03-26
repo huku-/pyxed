@@ -1,3 +1,8 @@
+2016-03-26 huku <huku@grhack.net>
+
+    * Implemented `get_isa_set()' in class `Instruction'.
+
+
 2016-03-25 huku <huku@grhack.net>
 
     * Tested latest version of Intel's XED, which now comes as a standalone

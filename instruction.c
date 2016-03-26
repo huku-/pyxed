@@ -13,6 +13,11 @@
 
 /* Instruction information related methods. */
 
+static PyObject *get_isa_set(instruction_t *self, PyObject *args)
+{
+    return PyInt_FromLong(xed_decoded_inst_get_isa_set(self->decoded_inst));
+}
+
 static PyObject *get_category(instruction_t *self, PyObject *args)
 {
     return PyInt_FromLong(xed_decoded_inst_get_category(self->decoded_inst));
@@ -480,6 +485,7 @@ static PyMemberDef members[] =
 static PyMethodDef methods[] =
 {
     /* Instruction information related methods. */
+    M_NOARGS(get_isa_set),
     M_NOARGS(get_category),
     M_NOARGS(get_extension),
     M_NOARGS(get_iclass),

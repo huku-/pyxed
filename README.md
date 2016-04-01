@@ -53,7 +53,7 @@ To fix it, run the following command after substituting **/path/to/libxed.dylib*
 with the actual path of **libxed.dylib** in your filesystem.
 
 ```sh
-$ install_name_tool -change obj-mac-clang-5.1.0-shared/libxed.dylib /path/to/libxed.dylib
+$ install_name_tool -change obj-mac-clang-5.1.0-shared/libxed.dylib /path/to/libxed.dylib pyxed.so
 ```
 
 

@@ -12,7 +12,7 @@
 static PyMemberDef members[] =
 {
     {"_if", T_UINT, offsetof(rflags_t, _if), 0, "Interrupt enable flag"},
-    {"ac", T_UINT, offsetof(rflags_t, ac), 0, "Alignment check"},
+    {"ac", T_UINT, offsetof(rflags_t, ac), 0, "Alignment check flag"},
     {"af", T_UINT, offsetof(rflags_t, af), 0, "Adjust flag"},
     {"cf", T_UINT, offsetof(rflags_t, cf), 0, "Carry flag"},
     {"df", T_UINT, offsetof(rflags_t, df), 0, "Direction flag"},
@@ -24,18 +24,12 @@ static PyMemberDef members[] =
     {"sf", T_UINT, offsetof(rflags_t, sf), 0, "Sign flag"},
     {"tf", T_UINT, offsetof(rflags_t, tf), 0, "Trap flag"},
     {"vif", T_UINT, offsetof(rflags_t, vif), 0, "Virtual interrupt flag"},
-    {"vip", T_UINT, offsetof(rflags_t, vip), 0, "Virtual interrupt pending"},
+    {"vip", T_UINT, offsetof(rflags_t, vip), 0, "Virtual interrupt pending flag"},
     {"vm", T_UINT, offsetof(rflags_t, vm), 0, "Virtual 8086 mode flag"},
     {"zf", T_UINT, offsetof(rflags_t, zf), 0, "Zero flag"},
     {NULL, 0, 0, 0, NULL}
 };
 
-
-/* See comment in "decoder.c" for more information. */
-static PyObject type_base =
-{
-    PyObject_HEAD_INIT(NULL)
-};
 
 static PyTypeObject type;
 
@@ -67,11 +61,17 @@ rflags_t *new_rflags(const xed_flag_set_t *flags)
 /* Initialization of `pyxed.Rflags' type should go here. */
 static void initialize_rflags_type(PyTypeObject *type)
 {
+    /* See comment in "decoder.c" for more information. */
+    static PyObject type_base =
+    {
+        PyObject_HEAD_INIT(NULL)
+    };
+
     *(PyObject *)type = type_base;
     type->tp_name = "pyxed.Rflags";
     type->tp_basicsize = sizeof(rflags_t);
     type->tp_flags = Py_TPFLAGS_DEFAULT;
-    type->tp_doc = "Represents the CPU flags register contents";
+    type->tp_doc = "Represents EFLAGS/RFLAGS register contents.";
     type->tp_members = members;
 }
 
@@ -84,5 +84,4 @@ void register_rflags_object(PyObject *module)
         PyModule_AddObject(module, "Rflags", (PyObject *)&type);
     }
 }
-
 

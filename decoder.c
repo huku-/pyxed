@@ -11,10 +11,9 @@
 
 
 
-static int init(PyObject *self, PyObject *args, PyObject *kwds)
+static int init(xed_t *self, PyObject *args, PyObject *kwds)
 {
     /* The call to `tp_alloc()' will initialize memory with zeros. */
-    xed_t *xed = (xed_t *)self;
     xed->mmode = XED_MACHINE_MODE_LONG_COMPAT_32;
     xed->stack_addr_width = XED_ADDRESS_WIDTH_32b;
     return 0;
@@ -27,7 +26,9 @@ static PyObject *decode(xed_t *self, PyObject *args)
     unsigned long long runtime_address, itext_offset, itext_size;
     const xed_uint8_t *buf;
     unsigned int bytes;
+
     PyObject *r = NULL;
+
 
     /* Make sure we have a valid input buffer. */
     if(is_string(self->itext) == 0)
@@ -35,6 +36,7 @@ static PyObject *decode(xed_t *self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Invalid instruction text");
         goto _err;
     }
+
 
     itext_offset = self->itext_offset;
     itext_size = (unsigned long long)PyString_Size(self->itext);
@@ -46,13 +48,13 @@ static PyObject *decode(xed_t *self, PyObject *args)
         r = Py_None;
         goto _err;
     }
-
     /* If the offset given is invalid, raise `InvalidOffsetException'. */
-    if(itext_offset > itext_size)
+    else if(itext_offset > itext_size)
     {
         PyErr_SetString(invalid_offset, "Invalid instruction text offset");
         goto _err;
     }
+
 
     /* Decode next instruction from the input buffer. */
     decoded_inst = PyMem_Malloc(sizeof(xed_decoded_inst_t));
@@ -126,24 +128,24 @@ static PyMethodDef methods[] =
 };
 
 
-/* When compiling on Microsoft Windows with older versions of Visual Studio, we
- * can't use designated initializers for structure types; this C99 feature is
- * not supported. To properly initialize a `PyTypeObject' and avoid compiler
- * warnings, we first need to initialize a `PyObject' (fully initialized by
- * `PyObject_HEAD_INIT()') and then assign the latter to the first. Have a look
- * at `initialize_decoder_type()' below for more information.
- */
-static PyObject type_base =
-{
-    PyObject_HEAD_INIT(NULL)
-};
-
 static PyTypeObject type;
 
 
 /* Initialization of `pyxed.Decoder' type should go here. */
 static void initialize_decoder_type(PyTypeObject *type)
 {
+    /* When compiling on Microsoft Windows with older versions of Visual Studio,
+     * we can't make use of designated initializers for structure types; this
+     * C99 feature is not supported. To properly initialize a `PyTypeObject' and
+     * avoid compiler warnings, we first need to initialize a `PyObject' (fully
+     * initialized by `PyObject_HEAD_INIT()') and then assign the latter to the
+     * first.
+     */
+    static PyObject type_base =
+    {
+        PyObject_HEAD_INIT(NULL)
+    };
+
     /* All Python structures are castable to `PyObject' and structure assignment
      * is a well defined construct.
      */
@@ -151,10 +153,10 @@ static void initialize_decoder_type(PyTypeObject *type)
     type->tp_name = "pyxed.Decoder";
     type->tp_basicsize = sizeof(xed_t);
     type->tp_flags = Py_TPFLAGS_DEFAULT;
-    type->tp_doc = "Main decoder object";
+    type->tp_doc = "Main decoder object.";
     type->tp_methods = methods;
     type->tp_members = members;
-    type->tp_init = init;
+    type->tp_init = (initproc)init;
     type->tp_new = PyType_GenericNew;
 }
 

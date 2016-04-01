@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''written_regs.py - Shows what registers are modified by each instruction.'''
+'''dump_written_regs.py - Shows what registers are modified by each instruction.'''
 
 __author__ = 'huku <huku@grhack.net>'
 

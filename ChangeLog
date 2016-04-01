@@ -1,3 +1,12 @@
+2016-04-01 huku <huku@grhack.net>
+
+    * Removed unused `*args' argument in `M_NOARG' methods.
+    * Fixed `NULL' pointer dereference in `new_rflags()' when trying to read
+      EFLAGS/RFLAGS of an instruction that doesn't use it.
+    * Various code clean-ups, especially in "instruction.c".
+    * Renamed "written_regs.py" to "dump_written_regs.py" in "examples/".
+
+
 2016-03-26 huku <huku@grhack.net>
 
     * Implemented `get_isa_set()' in class `Instruction'.

@@ -14,8 +14,8 @@
 static int init(xed_t *self, PyObject *args, PyObject *kwds)
 {
     /* The call to `tp_alloc()' will initialize memory with zeros. */
-    xed->mmode = XED_MACHINE_MODE_LONG_COMPAT_32;
-    xed->stack_addr_width = XED_ADDRESS_WIDTH_32b;
+    self->mmode = XED_MACHINE_MODE_LONG_COMPAT_32;
+    self->stack_addr_width = XED_ADDRESS_WIDTH_32b;
     return 0;
 }
 

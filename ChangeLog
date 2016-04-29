@@ -1,3 +1,9 @@
+2016-04-29 huku <huku@grhack.net>
+
+    * Fixed compilation problem introduced in previous commit (spotted by
+      @imosukebe).
+
+
 2016-04-01 huku <huku@grhack.net>
 
     * Removed unused `*args' argument in `M_NOARG' methods.

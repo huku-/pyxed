@@ -2,8 +2,8 @@ PYTHON27_PREFIX=C:\Python27
 PYTHON27_HEADERS=$(PYTHON27_PREFIX)\include
 PYTHON27_LIBS=$(PYTHON27_PREFIX)\libs
 
-XED_PREFIX=C:\pin-2.14-71313-msvc10-windows\extras\xed-ia32
-# XED_PREFIX=C:\pin-2.14-71313-msvc10-windows\extras\xed-intel64
+XED_PREFIX=C:\kits\xed-install-base-2016-02-02-win-ia32
+# XED_PREFIX=C:\kits\xed-install-base-2016-02-02-win-x86-64
 XED_HEADERS=$(XED_PREFIX)\include
 XED_LIBS=$(XED_PREFIX)\lib
 
@@ -18,7 +18,7 @@ CFLAGS=/nologo /W3 /O2 /GS /Zi /I $(PYTHON27_HEADERS) /I $(XED_HEADERS) /MT
 
 LDFLAGS=/nologo /DEBUG /DYNAMICBASE /NXCOMPAT /PDB:$(PDB) \
     /WX /DLL /LIBPATH:$(PYTHON27_LIBS) /LIBPATH:$(XED_LIBS) \
-    /DEFAULTLIB:python27.lib /DEFAULTLIB:libxed.lib
+    /DEFAULTLIB:python27.lib /DEFAULTLIB:xed.lib
 
 
 $(BIN): $(OBJS)

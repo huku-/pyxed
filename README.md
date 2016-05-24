@@ -100,8 +100,8 @@ To make **pyxed** work correctly I had to replace **python2.7-config** with
 ### Precompiled binaries
 
 Experimental precompiled binaries for Microsoft Windows can be downloaded from
-[here](https://www.grhack.net/pyxed.tgz). The tarball includes both a 32-bit and
-a 64-bit release of **pyxed**.
+[here](https://www.grhack.net/pyxed-vs2012-xed_2016_02_02.tgz). The tarball
+includes both a 32-bit and a 64-bit release of **pyxed**.
 
 Debian packages are also planned for the near future.
 

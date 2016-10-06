@@ -27,9 +27,13 @@ CC=cc
 all: pyc $(OBJS)
 	$(CC) $(OBJS) -o $(BIN) $(LDFLAGS)
 
+.PHONY: install
+install:
+	python setup.py install
+
 .PHONY: clean
 clean: pyc
-	rm -fr $(OBJS) $(BIN) core *.core a.out *~
+	rm -fr $(OBJS) $(BIN) core *.core a.out *~ build
 
 .PHONY: pyc
 pyc:

@@ -1,12 +1,11 @@
 PYTHON27_HEADERS=$(shell python2.7-config --includes)
 PYTHON27_LIBS=$(shell python2.7-config --libs)
 
-XED_PREFIX=pin-2.14/extras/xed-ia32
-# XED_PREFIX=pin-2.14-71313-clang.5.1-mac/extras/xed-ia32
-# XED_PREFIX=pin-2.14-71313-clang.5.1-mac/extras/xed-intel64
-# XED_PREFIX=pin-2.14-71313-gcc.4.4.7-linux/extras/xed-ia32
-# XED_PREFIX=pin-2.14-71313-gcc.4.4.7-linux/extras/xed-intel64
-XED_HEADERS=$(XED_PREFIX)/include
+# Path to XED kit produced by "./mfile.py install". See XED's documentation for
+# more information on how to compile it from source.
+XED_PREFIX=xed-install-base-2018-07-05-mac-x86-64
+
+XED_HEADERS=$(XED_PREFIX)/include/xed
 XED_LIBS=$(XED_PREFIX)/lib
 
 W=-Wall -Wextra \

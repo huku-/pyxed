@@ -157,8 +157,16 @@ static void register_constants(PyObject *module)
     /* Constants from "xed-reg-enum.h". */
     for(i = XED_REG_INVALID; i <= XED_REG_LAST; i++)
     {
-        name = xed_reg_enum_t2str((xed_reg_enum_t)i);
-        snprintf(full_name, sizeof(full_name), "XED_REG_%s", name);
+        /* Convert "XED_REG_st(0)" to "XED_REG_ST0" and so on. */
+        if(i >= XED_REG_ST0 && i <= XED_REG_ST7)
+        {
+            snprintf(full_name, sizeof(full_name), "XED_REG_ST%d", i - XED_REG_ST0);
+        }
+        else
+        {
+            name = xed_reg_enum_t2str((xed_reg_enum_t)i);
+            snprintf(full_name, sizeof(full_name), "XED_REG_%s", name);
+        }
         PyModule_AddObject(module, full_name, PyInt_FromLong(i));
     }
 }

@@ -2,8 +2,6 @@
 
 huku &lt;[huku@grhack.net](mailto:huku@grhack.net)&gt;
 
-<a href="https://pledgie.com/campaigns/27150"><img alt="" src="https://pledgie.com/campaigns/27150.png?skin_name=chrome" border="0" ></a>
-
 
 ## About
 
@@ -41,11 +39,10 @@ import **pyxed** in your project.
 
 ```
 Traceback (most recent call last):
-  File "examples/dump_asm.py", line 10, in <module>
-    import pyxed
-ImportError: dlopen(pyxed.so, 2): Library not loaded: obj-mac-clang-5.1.0-shared/libxed.dylib
+  File "<string>", line 1, in <module>
+ImportError: dlopen(pyxed.so, 2): Library not loaded: obj/libxed.dylib
   Referenced from: pyxed.so
-  Reason: unsafe use of relative rpath obj-mac-clang-5.1.0-shared/libxed.dylib in pyxed.so with restricted binary
+  Reason: unsafe use of relative rpath obj/libxed.dylib in pyxed.so with restricted binary
 ```
 
 This is a problem related to hardcoded **rpath** values in Intel's **libxed.dylib**.
@@ -53,7 +50,9 @@ To fix it, run the following command after substituting **/path/to/libxed.dylib*
 with the actual path of **libxed.dylib** in your filesystem.
 
 ```sh
-$ install_name_tool -change obj-mac-clang-5.1.0-shared/libxed.dylib /path/to/libxed.dylib pyxed.so
+$ otool -L pyxed.so | grep libxed.dylib
+    obj/libxed.dylib
+$ install_name_tool -change obj/libxed.dylib /path/to/libxed.dylib pyxed.so
 ```
 
 

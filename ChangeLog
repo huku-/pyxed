@@ -1,3 +1,11 @@
+2018-07-05 huku <huku@grhack.net>
+
+  * Fixed bug in `register_constants()' (issue #3, spotted by @majinxx297).
+  * Updated "Makefile" to make it compatible with newer versions of XED
+    (issue #2, spotted by @andermoran).
+  * Minor "README.md" updates.
+
+
 2016-10-06 huku <huku@grhack.net>
 
    * Added "setup.py" and modified makefiles accordingly.

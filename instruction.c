@@ -86,7 +86,7 @@ static PyObject *dump_intel_format(instruction_t *self)
     xed_format_context(XED_SYNTAX_INTEL, self->decoded_inst, buf, sizeof(buf) - 1,
         self->runtime_address, NULL, NULL);
 
-    return PyString_FromFormat("%p %s", (void *)self->runtime_address, buf);
+    return PyUnicode_FromFormat("%p %s", (void *)self->runtime_address, buf);
 }
 
 
@@ -752,7 +752,7 @@ static void initialize_instruction_type(PyTypeObject *type)
     /* See comment in "decoder.c" for more information. */
     static PyObject type_base =
     {
-        PyObject_HEAD_INIT(NULL)
+        PyVarObject_HEAD_INIT(NULL, 0)
     };
 
     *(PyObject *)type = type_base;

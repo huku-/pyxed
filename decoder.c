@@ -143,7 +143,7 @@ static void initialize_decoder_type(PyTypeObject *type)
      */
     static PyObject type_base =
     {
-        PyObject_HEAD_INIT(NULL)
+        PyVarObject_HEAD_INIT(NULL, 0)
     };
 
     /* All Python structures are castable to `PyObject' and structure assignment

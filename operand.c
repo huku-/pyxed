@@ -177,7 +177,7 @@ static void initialize_operand_type(PyTypeObject *type)
     /* See comment in "decoder.c" for more information. */
     PyObject type_base =
     {
-        PyObject_HEAD_INIT(NULL)
+        PyVarObject_HEAD_INIT(NULL, 0)
     };
 
     *(PyObject *)type = type_base;

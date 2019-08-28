@@ -1,3 +1,8 @@
+2019-08-28 Danny Quist
+  * Added Python 3 support
+  * Intel Xed as a sub-module
+  * Build system now completely distools based
+
 2018-07-05 huku <huku@grhack.net>
 
   * Fixed bug in `register_constants()' (issue #3, spotted by @majinxx297).

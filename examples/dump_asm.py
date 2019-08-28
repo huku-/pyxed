@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 '''dump_asm.py - Simple XED2 based disassembler.'''
 
+from __future__ import print_function
 __author__ = 'huku <huku@grhack.net>'
-
 
 import sys
 import binascii
@@ -13,7 +13,7 @@ import pyxed
 def main(argv):
 
     if len(argv) != 2:
-        print '%s <hex>' % argv[0]
+        print('%s <hex>' % argv[0])
         return 1
 
     xed = pyxed.Decoder()
@@ -25,7 +25,7 @@ def main(argv):
         inst = xed.decode()
         if inst is None:
             break
-        print inst.dump_intel_format()
+        print(inst.dump_intel_format())
 
     return 0
 

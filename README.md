@@ -14,13 +14,30 @@ it doesn't provide any high level abstractions.
 
 **pyxed** comes with Makefiles for the most widely used platforms, namely
 Microsoft Windows, MacOS X and Linux. All Makefiles require that you edit them
-and set **XED_PREFIX** appropriately.
+and set **XED_PREFIX** appropriately. In order to compile the Python 3 
+module, you will need to initialize the sub-modules:
 
+```shell script
+$ git submodule update --init --recursive
+````
 
 ### Linux
 
+There are two methods for compiling **pyxed**: Using the make file (Python 2 only)
+or using the Python distools.
+
+#### Makefile (Python 2)
+
 Compiling on Linux requires GCC to be installed (chances are it is). Just open a
 terminal, enter **pyxed**'s top-level directory and run **make**.
+
+#### Python Distools (Python 2 and 3)
+
+Simply build the module:
+
+```shell script
+$ python3 setup.py build
+````
 
 
 ### MacOS X

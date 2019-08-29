@@ -33,9 +33,19 @@ static PyObject *get_iclass(instruction_t *self)
     return PyInt_FromLong(xed_decoded_inst_get_iclass(self->decoded_inst));
 }
 
+static PyObject *get_iclass_str(instruction_t *self)
+{
+    return PyUnicode_FromString(xed_iclass_enum_t2str(xed_decoded_inst_get_iclass(self->decoded_inst)));
+}
+
 static PyObject *get_iform(instruction_t *self)
 {
     return PyInt_FromLong(xed_decoded_inst_get_iform_enum(self->decoded_inst));
+}
+
+static PyObject *get_iform_str(instruction_t *self)
+{
+    return PyUnicode_FromString(xed_iform_enum_t2str(xed_decoded_inst_get_iform_enum(self->decoded_inst)));
 }
 
 static PyObject *get_attribute(instruction_t *self, PyObject *args)
@@ -665,7 +675,9 @@ static PyMethodDef methods[] =
     M_NOARGS(get_category),
     M_NOARGS(get_extension),
     M_NOARGS(get_iclass),
+    M_NOARGS(get_iclass_str),
     M_NOARGS(get_iform),
+    M_NOARGS(get_iform_str),
     M_VARARGS(get_attribute),
     M_NOARGS(get_length),
     M_NOARGS(conditionally_writes_registers),

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 '''dump_rflags.py - Dump the flags read/written by each instruction.'''
 
+from __future__ import print_function
+
 __author__ = 'huku <huku@grhack.net>'
 
 
@@ -27,7 +29,7 @@ def rflags_to_str(flags):
 def main(argv):
 
     if len(argv) != 2:
-        print '%s <hex>' % argv[0]
+        print('%s <hex>' % argv[0])
         return 1
 
     xed = pyxed.Decoder()
@@ -39,11 +41,11 @@ def main(argv):
         inst = xed.decode()
         if inst is None:
             break
-        print '%s' % inst.dump_intel_format()
-        print 'Read: %s' % rflags_to_str(inst.get_rflags_read())
-        print 'Undefined: %s' % rflags_to_str(inst.get_rflags_undefined()) 
-        print 'Written: %s' % rflags_to_str(inst.get_rflags_written()) 
-        print '-'
+        print('%s' % inst.dump_intel_format())
+        print('Read: %s' % rflags_to_str(inst.get_rflags_read()))
+        print('Undefined: %s' % rflags_to_str(inst.get_rflags_undefined()))
+        print('Written: %s' % rflags_to_str(inst.get_rflags_written()))
+        print('-')
 
     return 0
 

@@ -22,6 +22,20 @@ static PyMethodDef methods[] =
     M_NULL
 };
 
+#if PY_MAJOR_VERSION >= 3
+    static struct PyModuleDef moduledef = {
+            PyModuleDef_HEAD_INIT,
+            "pyxed",
+            "Python module for Intel XED",
+            -1,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+    };
+#endif
+
 
 /* Register several XED related constants in the module's global scope. */
 static void register_constants(PyObject *module)
@@ -185,21 +199,44 @@ static void register_exceptions(PyObject *module)
     PyModule_AddObject(module, "InvalidOffsetError", invalid_offset);
 }
 
-
+#if PY_MAJOR_VERSION >= 3
+PyMODINIT_FUNC PyInit_pyxed(void)
+#else
 PyMODINIT_FUNC initpyxed(void)
+#endif
 {
-    PyObject *module;
+    PyObject *m = NULL;
 
     /* XED specific initialization. */
     xed_tables_init();
 
     /* Make XED objects visible to Python. */
-    module = Py_InitModule("pyxed", methods);
-    register_constants(module);
-    register_exceptions(module);
-    register_rflags_object(module);
-    register_operand_object(module);
-    register_instruction_object(module);
-    register_decoder_object(module);
+#if PY_MAJOR_VERSION >= 3
+    m = PyModule_Create(&moduledef);
+#else
+    m = Py_InitModule("pyxed", methods);
+#endif
+
+
+    if (m == NULL)
+#if PY_MAJOR_VERSION >= 3
+        return NULL;
+#else
+        return;
+#endif
+
+    register_constants(m);
+    register_exceptions(m);
+    register_rflags_object(m);
+    register_operand_object(m);
+    register_instruction_object(m);
+    register_decoder_object(m);
+
+#if PY_MAJOR_VERSION >= 3
+    return m;
+#else
+    return;
+#endif
+
 }
 

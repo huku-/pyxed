@@ -1,8 +1,5 @@
-#!/usr/bin/env python
-'''dump_asm.py - Simple XED2 based disassembler.'''
-
 from __future__ import print_function
-__author__ = 'huku <huku@grhack.net>'
+__author__ = 'dannyquist'
 
 import sys
 import binascii
@@ -25,11 +22,10 @@ def main(argv):
         inst = xed.decode()
         if inst is None:
             break
-        print(inst.dump_intel_format())
+        print(inst.get_iclass_str())
 
     return 0
 
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
-

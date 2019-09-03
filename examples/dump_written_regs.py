@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 '''dump_written_regs.py - Shows what registers are modified by each instruction.'''
+from __future__ import print_function
 
 __author__ = 'huku <huku@grhack.net>'
 
@@ -27,7 +28,7 @@ def get_reg_name(reg):
 def main(argv):
 
     if len(argv) != 2:
-        print '%s <hex>' % argv[0]
+        print('%s <hex>' % argv[0])
         return 1
 
     xed = pyxed.Decoder()
@@ -40,7 +41,7 @@ def main(argv):
         if inst is None:
             break
 
-        print '| %s' % inst.dump_intel_format()
+        print('| %s' % inst.dump_intel_format())
 
         # Iterate through all the operands of the current instruction.
         for i in range(inst.get_noperands()):
@@ -51,9 +52,9 @@ def main(argv):
             if op.is_register():
                 reg_name = get_reg_name(inst.get_reg(op.get_name()))
                 if op.is_read_and_written():
-                    print '\_ %-16s RW' % reg_name
+                    print('\_ %-16s RW' % reg_name)
                 elif op.is_written_only():
-                    print '\_ %-16s W' % reg_name
+                    print('\_ %-16s W' % reg_name)
 
     return 0
 

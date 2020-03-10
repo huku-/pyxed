@@ -1,3 +1,7 @@
+2020-03-10 William Woodruff <william@trailofbits.com>
+  * Added mbuild as a submodule (for XED builds)
+  * Added GitHub Actions-based CI
+
 2019-08-28 Danny Quist
   * Added Python 3 support
   * Intel Xed as a sub-module

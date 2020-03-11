@@ -1,6 +1,6 @@
 [submodule "external/xed"]
 	path = external/xed
-	url = git@github.com:intelxed/xed.git
+	url = https://github.com/intelxed/xed.git
 [submodule "external/mbuild"]
 	path = external/mbuild
-	url = git@github.com:intelxed/mbuild.git
+	url = https://github.com/intelxed/mbuild.git

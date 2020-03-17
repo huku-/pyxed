@@ -18,14 +18,29 @@ static PyObject *get_isa_set(instruction_t *self)
     return PyInt_FromLong(xed_decoded_inst_get_isa_set(self->decoded_inst));
 }
 
+static PyObject *get_isa_set_str(instruction_t *self)
+{
+    return PyUnicode_FromString(xed_isa_set_enum_t2str(xed_decoded_inst_get_isa_set(self->decoded_inst)));
+}
+
 static PyObject *get_category(instruction_t *self)
 {
     return PyInt_FromLong(xed_decoded_inst_get_category(self->decoded_inst));
 }
 
+static PyObject *get_category_str(instruction_t *self)
+{
+    return PyUnicode_FromString(xed_category_enum_t2str(xed_decoded_inst_get_category(self->decoded_inst)));
+}
+
 static PyObject *get_extension(instruction_t *self)
 {
     return PyInt_FromLong(xed_decoded_inst_get_extension(self->decoded_inst));
+}
+
+static PyObject *get_extension_str(instruction_t *self)
+{
+    return PyUnicode_FromString(xed_extension_enum_t2str(xed_decoded_inst_get_extension(self->decoded_inst)));
 }
 
 static PyObject *get_iclass(instruction_t *self)
@@ -672,8 +687,11 @@ static PyMethodDef methods[] =
 {
     /* Instruction information related methods. */
     M_NOARGS(get_isa_set),
+    M_NOARGS(get_isa_set_str),
     M_NOARGS(get_category),
+    M_NOARGS(get_category_str),
     M_NOARGS(get_extension),
+    M_NOARGS(get_extension_str),
     M_NOARGS(get_iclass),
     M_NOARGS(get_iclass_str),
     M_NOARGS(get_iform),

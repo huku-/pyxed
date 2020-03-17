@@ -1,3 +1,6 @@
+2020-03-17 William Woodruff <william@trailofbits.com>
+  * Added more accessor methods to pyxed.Operand
+
 2020-03-10 William Woodruff <william@trailofbits.com>
   * Added mbuild as a submodule (for XED builds)
   * Added GitHub Actions-based CI

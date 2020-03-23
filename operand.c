@@ -20,9 +20,29 @@ static PyObject *get_name(operand_t *self)
     return PyInt_FromLong(xed_operand_name(self->operand));
 }
 
+static PyObject *get_name_str(operand_t *self)
+{
+    return PyUnicode_FromString(xed_operand_enum_t2str(xed_operand_name(self->operand)));
+}
+
+static PyObject *get_nonterminal_name(operand_t *self)
+{
+    return PyInt_FromLong(xed_operand_nonterminal_name(self->operand));
+}
+
+static PyObject *get_nonterminal_name_str(operand_t *self)
+{
+    return PyUnicode_FromString(xed_nonterminal_enum_t2str(xed_operand_nonterminal_name(self->operand)));
+}
+
 static PyObject *get_visibility(operand_t *self)
 {
     return PyInt_FromLong(xed_operand_operand_visibility(self->operand));
+}
+
+static PyObject *get_visibility_str(operand_t *self)
+{
+    return PyUnicode_FromString(xed_operand_visibility_enum_t2str(xed_operand_operand_visibility(self->operand)));
 }
 
 static PyObject *get_type(operand_t *self)
@@ -30,14 +50,29 @@ static PyObject *get_type(operand_t *self)
     return PyInt_FromLong(xed_operand_type(self->operand));
 }
 
+static PyObject *get_type_str(operand_t *self)
+{
+    return PyUnicode_FromString(xed_operand_type_enum_t2str(xed_operand_type(self->operand)));
+}
+
 static PyObject *get_xtype(operand_t *self)
 {
     return PyInt_FromLong(xed_operand_xtype(self->operand));
 }
 
+static PyObject *get_xtype_str(operand_t *self)
+{
+    return PyUnicode_FromString(xed_operand_xtype_enum_t2str(xed_operand_xtype(self->operand)));
+}
+
 static PyObject *get_width(operand_t *self)
 {
     return PyInt_FromLong(xed_operand_width(self->operand));
+}
+
+static PyObject *get_width_str(operand_t *self)
+{
+    return PyUnicode_FromString(xed_operand_width_enum_t2str(xed_operand_width(self->operand)));
 }
 
 static PyObject *get_width_bits(operand_t *self, PyObject *args)
@@ -134,10 +169,17 @@ static PyMethodDef methods[] =
     /* Operand information related methods. */
     M_NOARGS(get_imm),
     M_NOARGS(get_name),
+    M_NOARGS(get_name_str),
+    M_NOARGS(get_nonterminal_name),
+    M_NOARGS(get_nonterminal_name_str),
     M_NOARGS(get_visibility),
+    M_NOARGS(get_visibility_str),
     M_NOARGS(get_type),
+    M_NOARGS(get_type_str),
     M_NOARGS(get_xtype),
+    M_NOARGS(get_xtype_str),
     M_NOARGS(get_width),
+    M_NOARGS(get_width_str),
     M_VARARGS(get_width_bits),
     M_NOARGS(is_memory_addressing_register),
     M_NOARGS(is_register),

@@ -1,3 +1,6 @@
+2020-03-24 William William <william@trailofbits.com>
+  * Bumped XED submodule to 4012555
+
 2020-03-17 William Woodruff <william@trailofbits.com>
   * Added more accessor methods to pyxed.Operand
 

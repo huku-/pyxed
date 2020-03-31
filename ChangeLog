@@ -1,4 +1,7 @@
-2020-03-24 William William <william@trailofbits.com>
+2020-03-31 William Woodruff <william@trailofbits.com>
+  * Fixed an incorrect function call in operand.c
+
+2020-03-24 William Woodruff <william@trailofbits.com>
   * Bumped XED submodule to 4012555
 
 2020-03-17 William Woodruff <william@trailofbits.com>

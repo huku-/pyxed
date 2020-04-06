@@ -62,7 +62,7 @@ static PyObject *get_xtype(operand_t *self)
 
 static PyObject *get_xtype_str(operand_t *self)
 {
-    return PyUnicode_FromString(xed_operand_xtype_enum_t2str(xed_operand_xtype(self->operand)));
+    return PyUnicode_FromString(xed_operand_element_xtype_enum_t2str(xed_operand_xtype(self->operand)));
 }
 
 static PyObject *get_width(operand_t *self)

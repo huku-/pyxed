@@ -17,9 +17,10 @@
  */
 #define M_NOARGS(x) {#x, ((PyCFunction)(x)), METH_NOARGS, NULL}
 #define M_VARARGS(x) {#x, ((PyCFunction)(x)), METH_VARARGS, NULL}
+#define M_KWARGS(x) {#x, ((PyCFunction)(x)), METH_VARARGS | METH_KEYWORDS, NULL}
 
 /* Define `M_NULL' to avoid using `{NULL}' in `PyMethodDef[]' definitions. Fixes
- * several compiler warnings about missing initializers thrown on my Mac OS X 
+ * several compiler warnings about missing initializers thrown on my Mac OS X
  * system by LLVM. According to K&R, however, using `{NULL}' is correct.
  */
 #define M_NULL {NULL, NULL, 0, NULL}

@@ -99,9 +99,16 @@ static PyObject *conditionally_writes_registers(instruction_t *self)
     return PyBool_FromLong((long)flag);
 }
 
-static PyObject *dump_intel_format(instruction_t *self)
+static PyObject *dump_intel_format(instruction_t *self, PyObject *args, PyObject *kwargs)
 {
+    char *kwlist[] = {"address", NULL};
+    int print_address = 0;
     char buf[64];
+    PyObject *r = NULL;
+
+    if (PyArg_ParseTupleAndKeywords(args, kwargs, "|$p", kwlist, &print_address) == 0) {
+        goto _err;
+    }
 
     /* In Pin versions before "pin-2.14-*", `xed_format_context()' takes 6
      * parameters instead of 7. Unfortunately, there's no consistent way of
@@ -111,7 +118,14 @@ static PyObject *dump_intel_format(instruction_t *self)
     xed_format_context(XED_SYNTAX_INTEL, self->decoded_inst, buf, sizeof(buf) - 1,
         self->runtime_address, NULL, NULL);
 
-    return PyUnicode_FromFormat("%p %s", (void *)self->runtime_address, buf);
+    if (print_address) {
+        r = PyUnicode_FromFormat("%p %s", (void *)self->runtime_address, buf);
+    } else {
+        r = PyUnicode_FromString(buf);
+    }
+
+    _err:
+    return r;
 }
 
 
@@ -699,7 +713,7 @@ static PyMethodDef methods[] =
     M_VARARGS(get_attribute),
     M_NOARGS(get_length),
     M_NOARGS(conditionally_writes_registers),
-    M_NOARGS(dump_intel_format),
+    M_KWARGS(dump_intel_format),
 
     /* EFLAGS/RFLAGS information related methods. */
     M_NOARGS(uses_rflags),

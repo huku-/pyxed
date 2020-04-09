@@ -20,13 +20,13 @@ def build_xed():
         return False
 
     if not os.path.exists(XED_KITS_DIR):
-        err = subprocess.call(XED_MFILE + " --shared", shell=True)
+        err = subprocess.call(XED_MFILE + " --static", shell=True)
 
         if err != 0:
             print("Problem with xed build", file=sys.stderr)
             return False
 
-        ret = subprocess.check_output(XED_MFILE + " --shared install", shell=True)
+        ret = subprocess.check_output(XED_MFILE + " --static install", shell=True)
 
         if not ret:
             print("Xed installation step failed", file=sys.stderr)

@@ -91,5 +91,6 @@ setup(
     url='https://github.com/huku-/pyxed',
     packages=[''],
     package_data={'': XED_PACKAGE_DATA},
-    ext_modules=[pyxed_mod])
+    ext_modules=[pyxed_mod],
+    extras_require={'dev': ['pytest']})
 

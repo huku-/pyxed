@@ -68,9 +68,10 @@ except OSError as e:
 # Set up our sources, libraries, and includes for compilation
 pyxed_mod = Extension('pyxed',
                       include_dirs=[os.path.join(XED_CURRENT_KIT_DIR, "include/xed")],
+                      library_dirs=[os.path.join(XED_CURRENT_KIT_DIR, "lib")],
                       extra_compile_args=["-fPIC"],
                       extra_link_args=['-Wl,--whole-archive',
-                                       os.path.join(XED_CURRENT_KIT_DIR, "lib/libxed.a"),
+                                       '-lxed',
                                        '-Wl,--no-whole-archive'],
                       sources=['check.c',
                                'decoder.c',

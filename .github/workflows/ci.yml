@@ -32,3 +32,7 @@ jobs:
           python-version: ${{ matrix.python }}
       - name: build
         run: python3 setup.py build
+      - name: test
+        run: |
+          pip3 install .[dev]
+          pytest

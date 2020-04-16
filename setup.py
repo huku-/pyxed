@@ -20,7 +20,7 @@ def build_xed():
         return False
 
     if not os.path.exists(XED_KITS_DIR):
-        err = subprocess.call(XED_MFILE + " --static", shell=True)
+        err = subprocess.call(XED_MFILE + " --static --extra-flags=\"-fPIC\"", shell=True)
 
         if err != 0:
             print("Problem with xed build", file=sys.stderr)

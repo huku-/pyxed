@@ -49,6 +49,7 @@ def extra_link_args():
         print(
             f"Don't know how to link static XED to pyxed on your platform: {sys.platform}"
         )
+        sys.exit(1)
 
 
 # Make a directory, don't care if it already exists

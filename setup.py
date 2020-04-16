@@ -99,12 +99,6 @@ pyxed_mod = Extension(
     ],
 )
 
-XED_PACKAGE_DATA = [
-    "pyxed.so",
-    XED_CURRENT_KIT_DIR + "/lib/libxed-ild.so",
-    XED_CURRENT_KIT_DIR + "/lib/libxed.so",
-]
-
 setup(
     name="pyxed",
     version="1.1",
@@ -113,6 +107,5 @@ setup(
     author_email="huku@grhack.net",
     url="https://github.com/huku-/pyxed",
     packages=[""],
-    package_data={"": XED_PACKAGE_DATA},
     ext_modules=[pyxed_mod],
 )

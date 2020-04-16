@@ -26,7 +26,7 @@ def build_xed():
             print("Problem with xed build", file=sys.stderr)
             return False
 
-        ret = subprocess.check_output(XED_MFILE + " --static install", shell=True)
+        ret = subprocess.check_output(XED_MFILE + " --static --extra-flags=\"-fPIC\" install", shell=True)
 
         if not ret:
             print("Xed installation step failed", file=sys.stderr)

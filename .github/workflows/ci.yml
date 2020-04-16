@@ -34,4 +34,4 @@ jobs:
       - name: test
         run: |
           pip3 install .[dev]
-          pytests
+          pytest

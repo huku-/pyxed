@@ -1,3 +1,7 @@
+2020-04-20 William Woodruff <william@trailofbits.com>
+  * Bumped XED submodule to afbb851
+  * Bumped mbuild submodule to 5304b94
+
 2020-04-06 William Woodruff <william@trailofbits.com>
   * Allow dump_intel_format to take a keyword argument for
     suppressing the runtime address

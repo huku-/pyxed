@@ -7,3 +7,5 @@ build
 *.o
 *.so
 *.core
+*.pyc
+*.egg-info/

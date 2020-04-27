@@ -9,7 +9,7 @@ XED_DIR = os.path.abspath("./build/")
 XED_SRC_DIR = os.path.abspath("./external/xed")
 XED_MFILE = os.path.join(XED_SRC_DIR, "mfile.py")
 XED_KITS_DIR = os.path.join(XED_DIR, "kits")
-XED_CURRENT_KIT_DIR = None
+XED_CURRENT_KIT_DIR = os.getenv("XED_CURRENT_KIT_DIR")
 
 
 def build_xed():
@@ -50,20 +50,21 @@ except OSError as e:
     print("Error opening build directory", e, file=sys.stderr)
     sys.exit(3)
 
-if not build_xed():
+if XED_CURRENT_KIT_DIR is None and not build_xed():
     sys.exit(1)
 
 # Restore the old directory
 os.chdir(old_dir)
 
 # Find the full kit directory
-try:
-    for d in os.listdir(XED_KITS_DIR):
-        if "xed-install-base" in d:
-            XED_CURRENT_KIT_DIR = os.path.join(XED_KITS_DIR, d)
-except OSError as e:
-    print("Could not find compiled Intel XED kit", e, file=sys.stderr)
-    sys.exit(2)
+if XED_CURRENT_KIT_DIR is None:
+    try:
+        for d in os.listdir(XED_KITS_DIR):
+            if "xed-install-base" in d:
+                XED_CURRENT_KIT_DIR = os.path.join(XED_KITS_DIR, d)
+    except OSError as e:
+        print("Could not find compiled Intel XED kit", e, file=sys.stderr)
+        sys.exit(2)
 
 # Set up our sources, libraries, and includes for compilation
 pyxed_mod = Extension('pyxed',
@@ -92,4 +93,3 @@ setup(
     packages=[''],
     package_data={'': XED_PACKAGE_DATA},
     ext_modules=[pyxed_mod])
-

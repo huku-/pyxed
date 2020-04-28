@@ -1,3 +1,7 @@
+2020-04-20 William Woodruff <william@trailofbits.com>
+  * Bumped XED submodule to afbb851
+  * Bumped mbuild submodule to 5304b94
+
 2020-04-16 William Woodruff <william@trailofbits.com>
   * Use a static build of XED in pyxed
   * Add pytest-based unit tests

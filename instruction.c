@@ -92,6 +92,20 @@ static PyObject *get_length(instruction_t *self)
     return PyInt_FromLong(xed_decoded_inst_get_length(self->decoded_inst));
 }
 
+static PyObject *get_modrm(instruction_t *self)
+{
+  xed_uint8_t modrm;
+  modrm = xed_decoded_inst_get_modrm(self->decoded_inst);
+  return PyLong_FromUnsignedLong(modrm);
+}
+
+static PyObject *get_nprefixes(instruction_t *self)
+{
+  xed_uint_t nprefixes;
+  nprefixes = xed_decoded_inst_get_nprefixes(self->decoded_inst);
+  return PyLong_FromUnsignedLong(nprefixes);
+}
+
 static PyObject *conditionally_writes_registers(instruction_t *self)
 {
     xed_bool_t flag;
@@ -712,6 +726,8 @@ static PyMethodDef methods[] =
     M_NOARGS(get_iform_str),
     M_VARARGS(get_attribute),
     M_NOARGS(get_length),
+    M_NOARGS(get_modrm),
+    M_NOARGS(get_nprefixes),
     M_NOARGS(conditionally_writes_registers),
     M_KWARGS(dump_intel_format),
 
@@ -818,4 +834,3 @@ void register_instruction_object(PyObject *module)
         PyModule_AddObject(module, "Instruction", (PyObject *)&type);
     }
 }
-

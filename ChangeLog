@@ -1,3 +1,9 @@
+2020-05-03 huku <huku@grhack.net>
+  * Fixed compiler warnings
+  * Allow prebuilt XED by fetching current kit from environment (@langston-barrett)
+  * Expose get_modrm() and get_nprefixes() via Instruction (@langston-barrett)
+  * Updated ChangeLog
+
 2020-04-20 William Woodruff <william@trailofbits.com>
   * Bumped XED submodule to afbb851
   * Bumped mbuild submodule to 5304b94

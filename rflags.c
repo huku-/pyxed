@@ -62,12 +62,12 @@ rflags_t *new_rflags(const xed_flag_set_t *flags)
 static void initialize_rflags_type(PyTypeObject *type)
 {
     /* See comment in "decoder.c" for more information. */
-    static PyObject type_base =
+    static PyObject type_base[] =
     {
-        PyObject_HEAD_INIT(NULL)
+        PYOBJECT_INITIALIZER
     };
 
-    *(PyObject *)type = type_base;
+    *(PyObject *)type = type_base[0];
     type->tp_name = "pyxed.Rflags";
     type->tp_basicsize = sizeof(rflags_t);
     type->tp_flags = Py_TPFLAGS_DEFAULT;

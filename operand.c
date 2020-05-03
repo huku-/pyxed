@@ -217,12 +217,12 @@ operand_t *new_operand(const xed_operand_t *operand)
 static void initialize_operand_type(PyTypeObject *type)
 {
     /* See comment in "decoder.c" for more information. */
-    PyObject type_base =
+    PyObject type_base[] =
     {
-        PyVarObject_HEAD_INIT(NULL, 0)
+        PYOBJECT_INITIALIZER
     };
 
-    *(PyObject *)type = type_base;
+    *(PyObject *)type = type_base[0];
     type->tp_name = "pyxed.Operand";
     type->tp_basicsize = sizeof(operand_t);
     type->tp_flags = Py_TPFLAGS_DEFAULT;

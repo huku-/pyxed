@@ -141,15 +141,15 @@ static void initialize_decoder_type(PyTypeObject *type)
      * initialized by `PyObject_HEAD_INIT()') and then assign the latter to the
      * first.
      */
-    static PyObject type_base =
+    static PyObject type_base[] =
     {
-        PyVarObject_HEAD_INIT(NULL, 0)
+        PYOBJECT_INITIALIZER
     };
 
     /* All Python structures are castable to `PyObject' and structure assignment
      * is a well defined construct.
      */
-    *(PyObject *)type = type_base;
+    *(PyObject *)type = type_base[0];
     type->tp_name = "pyxed.Decoder";
     type->tp_basicsize = sizeof(xed_t);
     type->tp_flags = Py_TPFLAGS_DEFAULT;

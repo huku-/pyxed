@@ -810,12 +810,12 @@ static void finalize_instruction_type(instruction_t *self)
 static void initialize_instruction_type(PyTypeObject *type)
 {
     /* See comment in "decoder.c" for more information. */
-    static PyObject type_base =
+    static PyObject type_base[] =
     {
-        PyVarObject_HEAD_INIT(NULL, 0)
+        PYOBJECT_INITIALIZER
     };
 
-    *(PyObject *)type = type_base;
+    *(PyObject *)type = type_base[0];
     type->tp_name = "pyxed.Instruction";
     type->tp_basicsize = sizeof(instruction_t);
     type->tp_dealloc = (destructor)finalize_instruction_type;

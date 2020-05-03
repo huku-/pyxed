@@ -37,4 +37,21 @@
     #define PyExc_StandardError PyExc_Exception
 #endif
 
+/* `PyObject_HEAD_INIT()' is designed for initializing descendants of `PyObject',
+ * like `PyTypeObject'. Interestingly, in Python 3, this macro comes with a set
+ * of surrounding braces and a trailing comma. However, this is not the case in
+ * Python 2! Interested readers can have a look at how the macro definitions, in
+ * "object.h", have changed between the two Python versions.
+ *
+ * To avoid compiler warnings about excess (Python 3) or missing (Python 2)
+ * braces, we make use of a simple trick which involves defining a `PyObject'
+ * array of a single element and always surround `PyObject_HEAD_INIT()' with a
+ * set of braces.
+ */
+#if PY_MAJOR_VERSION >= 3
+#define PYOBJECT_INITIALIZER PyObject_HEAD_INIT(NULL)
+#else
+#define PYOBJECT_INITIALIZER { PyObject_HEAD_INIT(NULL) }
+#endif
+
 #endif /* _INCLUDES_H_ */

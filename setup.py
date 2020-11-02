@@ -54,7 +54,7 @@ def extra_link_args():
 
 # Make a directory, don't care if it already exists
 try:
-    os.mkdir("./build")
+    os.mkdir(XED_BUILD_DIR)
 except OSError:
     pass
 
@@ -62,7 +62,7 @@ except OSError:
 
 old_dir = os.getcwd()
 try:
-    os.chdir("./build")
+    os.chdir(XED_BUILD_DIR)
 except OSError as e:
     print("Error opening build directory", e, file=sys.stderr)
     sys.exit(3)

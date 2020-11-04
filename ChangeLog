@@ -1,3 +1,7 @@
+2020-09-02 William Woodruff <william@trailofbits.com>
+  * Simplify out-of-tree builds with the XED_BUILD_DIR env variable
+  * Replace distutils with setuptools
+
 2020-05-03 huku <huku@grhack.net>
   * Fixed compiler warnings
   * Allow prebuilt XED by fetching current kit from environment (@langston-barrett)

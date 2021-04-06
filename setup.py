@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 from __future__ import print_function
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 import subprocess
 import os
 import sys
 
-XED_DIR = os.path.abspath("./build/")
+XED_BUILD_DIR = os.path.abspath(os.getenv("XED_BUILD_DIR", "./build/"))
 XED_SRC_DIR = os.path.abspath("./external/xed")
 XED_MFILE = os.path.join(XED_SRC_DIR, "mfile.py")
-XED_KITS_DIR = os.path.join(XED_DIR, "kits")
+XED_KITS_DIR = os.path.join(XED_BUILD_DIR, "kits")
 XED_CURRENT_KIT_DIR = os.getenv("XED_CURRENT_KIT_DIR")
 
 
@@ -54,7 +54,7 @@ def extra_link_args():
 
 # Make a directory, don't care if it already exists
 try:
-    os.mkdir("./build")
+    os.mkdir(XED_BUILD_DIR)
 except OSError:
     pass
 
@@ -62,7 +62,7 @@ except OSError:
 
 old_dir = os.getcwd()
 try:
-    os.chdir("./build")
+    os.chdir(XED_BUILD_DIR)
 except OSError as e:
     print("Error opening build directory", e, file=sys.stderr)
     sys.exit(3)

@@ -94,16 +94,16 @@ static PyObject *get_length(instruction_t *self)
 
 static PyObject *get_modrm(instruction_t *self)
 {
-  xed_uint8_t modrm;
-  modrm = xed_decoded_inst_get_modrm(self->decoded_inst);
-  return PyLong_FromUnsignedLong(modrm);
+    xed_uint8_t modrm;
+    modrm = xed_decoded_inst_get_modrm(self->decoded_inst);
+    return PyLong_FromUnsignedLong(modrm);
 }
 
 static PyObject *get_nprefixes(instruction_t *self)
 {
-  xed_uint_t nprefixes;
-  nprefixes = xed_decoded_inst_get_nprefixes(self->decoded_inst);
-  return PyLong_FromUnsignedLong(nprefixes);
+    xed_uint_t nprefixes;
+    nprefixes = xed_decoded_inst_get_nprefixes(self->decoded_inst);
+    return PyLong_FromUnsignedLong(nprefixes);
 }
 
 static PyObject *conditionally_writes_registers(instruction_t *self)
@@ -118,11 +118,11 @@ static PyObject *dump_intel_format(instruction_t *self, PyObject *args, PyObject
     char *kwlist[] = {"address", NULL};
     int print_address = 0;
     char buf[64];
+
     PyObject *r = NULL;
 
-    if (PyArg_ParseTupleAndKeywords(args, kwargs, "|$p", kwlist, &print_address) == 0) {
+    if(PyArg_ParseTupleAndKeywords(args, kwargs, "|$p", kwlist, &print_address) == 0)
         goto _err;
-    }
 
     /* In Pin versions before "pin-2.14-*", `xed_format_context()' takes 6
      * parameters instead of 7. Unfortunately, there's no consistent way of
@@ -132,13 +132,12 @@ static PyObject *dump_intel_format(instruction_t *self, PyObject *args, PyObject
     xed_format_context(XED_SYNTAX_INTEL, self->decoded_inst, buf, sizeof(buf) - 1,
         self->runtime_address, NULL, NULL);
 
-    if (print_address) {
+    if(print_address)
         r = PyUnicode_FromFormat("%p %s", (void *)self->runtime_address, buf);
-    } else {
+    else
         r = PyUnicode_FromString(buf);
-    }
 
-    _err:
+_err:
     return r;
 }
 
@@ -834,3 +833,4 @@ void register_instruction_object(PyObject *module)
         PyModule_AddObject(module, "Instruction", (PyObject *)&type);
     }
 }
+

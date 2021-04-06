@@ -17,22 +17,23 @@ PyObject *invalid_instruction;
 PyObject *invalid_offset;
 
 
-static PyMethodDef methods[] =
-{
-    M_NULL
-};
-
 #if PY_MAJOR_VERSION >= 3
-    static struct PyModuleDef moduledef = {
-            PyModuleDef_HEAD_INIT,
-            "pyxed",
-            "Python module for Intel XED",
-            -1,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
+    static struct PyModuleDef moduledef =
+    {
+        PyModuleDef_HEAD_INIT,
+        "pyxed",
+        "Python module for Intel XED",
+        -1,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+#else
+    static PyMethodDef methods[] =
+    {
+        M_NULL
     };
 #endif
 
@@ -217,8 +218,7 @@ PyMODINIT_FUNC initpyxed(void)
     m = Py_InitModule("pyxed", methods);
 #endif
 
-
-    if (m == NULL)
+    if(m == NULL)
 #if PY_MAJOR_VERSION >= 3
         return NULL;
 #else
@@ -237,6 +237,5 @@ PyMODINIT_FUNC initpyxed(void)
 #else
     return;
 #endif
-
 }
 

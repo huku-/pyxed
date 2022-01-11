@@ -5,11 +5,23 @@ import subprocess
 import os
 import sys
 
+HERE = os.path.dirname(__file__)
+
 XED_BUILD_DIR = os.path.abspath(os.getenv("XED_BUILD_DIR", "./build/"))
-XED_SRC_DIR = os.path.abspath("./external/xed")
+XED_SRC_DIR = os.path.join(HERE, "external/xed")
 XED_MFILE = os.path.join(XED_SRC_DIR, "mfile.py")
 XED_KITS_DIR = os.path.join(XED_BUILD_DIR, "kits")
 XED_CURRENT_KIT_DIR = os.getenv("XED_CURRENT_KIT_DIR")
+
+SOURCES = [
+    "check.c",
+    "decoder.c",
+    "encoder.c",
+    "instruction.c",
+    "operand.c",
+    "pyxed.c",
+    "rflags.c",
+]
 
 
 def build_xed():
@@ -90,15 +102,7 @@ pyxed_mod = Extension(
     library_dirs=[os.path.join(XED_CURRENT_KIT_DIR, "lib")],
     extra_compile_args=["-fPIC"],
     extra_link_args=extra_link_args(),
-    sources=[
-        "check.c",
-        "decoder.c",
-        "encoder.c",
-        "instruction.c",
-        "operand.c",
-        "pyxed.c",
-        "rflags.c",
-    ],
+    sources=[os.path.join(HERE, source) for source in SOURCES],
 )
 
 setup(

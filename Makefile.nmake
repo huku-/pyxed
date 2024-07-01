@@ -2,7 +2,7 @@ PYTHON27_PREFIX=C:\Python27
 PYTHON27_HEADERS=$(PYTHON27_PREFIX)\include
 PYTHON27_LIBS=$(PYTHON27_PREFIX)\libs
 
-XED_PREFIX=C:\kits\xed-install-base-2016-02-02-win-ia32
+XED_PREFIX=
 # XED_PREFIX=C:\kits\xed-install-base-2016-02-02-win-x86-64
 XED_HEADERS=$(XED_PREFIX)\include
 XED_LIBS=$(XED_PREFIX)\lib
@@ -29,4 +29,3 @@ install:
 
 clean:
 	del /F *.ilk *.obj *.dll *.lib *.pyd *.exp *.pdb build
-

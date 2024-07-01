@@ -30,4 +30,3 @@ int is_string(PyObject *object)
 {
     return (object && PyString_CheckExact(object));
 }
-

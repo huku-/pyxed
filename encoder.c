@@ -8,4 +8,3 @@
 #include "check.h"
 #include "encoder.h"
 #include "instruction.h"
-

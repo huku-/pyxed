@@ -238,4 +238,3 @@ PyMODINIT_FUNC initpyxed(void)
     return;
 #endif
 }
-

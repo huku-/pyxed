@@ -833,4 +833,3 @@ void register_instruction_object(PyObject *module)
         PyModule_AddObject(module, "Instruction", (PyObject *)&type);
     }
 }
-

@@ -3,6 +3,4 @@
 
 #include "includes.h"
 
-
-
 #endif /* _ENCODER_H_ */

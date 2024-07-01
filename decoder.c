@@ -169,4 +169,3 @@ void register_decoder_object(PyObject *module)
         PyModule_AddObject(module, "Decoder", (PyObject *)&type);
     }
 }
-

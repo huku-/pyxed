@@ -239,4 +239,3 @@ void register_operand_object(PyObject *module)
         PyModule_AddObject(module, "Operand", (PyObject *)&type);
     }
 }
-
